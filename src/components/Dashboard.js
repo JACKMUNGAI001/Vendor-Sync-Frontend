@@ -21,12 +21,12 @@ function Dashboard() {
   }, [user]);
 
   return (
-    <div>
-      <h1>Dashboard</h1>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">Dashboard</h1>
       <p>Role: {user?.role || 'Not logged in'}</p>
-      <ul>
+      <ul className="mt-4">
         {data.map(item => (
-          <li key={item.id}>{item.description}</li>
+          <li key={item.id} className="p-2 border-b">{item.description}</li>
         ))}
       </ul>
     </div>

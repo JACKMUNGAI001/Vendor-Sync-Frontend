@@ -98,3 +98,25 @@ function OrderForm() {
         </div>
       )}
 
+<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Vendor Selection */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Vendor *
+          </label>
+          <select
+            {...register('vendor_id', { required: 'Vendor is required' })}
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">Select a vendor</option>
+            {vendors.map(vendor => (
+              <option key={vendor.id} value={vendor.id}>
+                {vendor.name} - {vendor.contact_email}
+              </option>
+            ))}
+          </select>
+          {errors.vendor_id && (
+            <p className="text-red-500 text-sm mt-1">{errors.vendor_id.message}</p>
+          )}
+        </div>
+

@@ -82,3 +82,32 @@ export const LandingPage: React.FC = () => {
                 </li>
               </ul>
             </div>
+
+            {/* Vendor */}
+            <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-shadow">
+              <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
+                <Package className="h-6 w-6 text-purple-600" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-4 text-slate-900">Vendor</h3>
+              <ul className="space-y-3 text-slate-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Register and get approved</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Receive quote requests</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Submit competitive quotes</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Confirm deliveries</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>

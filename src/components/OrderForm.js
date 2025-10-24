@@ -69,3 +69,32 @@ function OrderForm() {
           };
         }
       });
+
+      await axios.post('http://localhost:5000/orders', {
+        material_list: materialList,
+        vendor_id: parseInt(data.vendor_id),
+        delivery_date: data.delivery_date,
+        special_instructions: data.special_instructions
+      }, {
+        headers: { Authorization: `Bearer ${user.token}` }
+      });
+      
+      navigate('/orders');
+    } catch (error) {
+      setError(error.response?.data?.message || 'Failed to create order');
+      console.error('Error creating order:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Create Purchase Order</h1>
+      
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+          {error}
+        </div>
+      )}
+

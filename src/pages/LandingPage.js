@@ -111,3 +111,37 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* CTA Section */}
+      <section className="bg-gradient-to-r from-blue-600 to-cyan-500 py-20">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold mb-6 text-white">Ready to Transform Your Procurement?</h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            Join leading construction companies who save time and money with VendorSync
+          </p>
+          <Link to="/login">
+            <Button size="lg" variant="secondary" className="text-lg px-8 bg-white text-blue-600 hover:bg-gray-100">
+              Start Your Free Trial
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+       {/* Footer */}
+       <footer className="bg-slate-900 text-slate-400 py-12">
+        <div className="container mx-auto px-4 text-center">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Building2 className="h-6 w-6 text-blue-400" />
+            <span className="text-white font-semibold">VendorSync</span>
+          </div>
+          <p className="text-sm">
+            Streamlining construction procurement for modern teams.
+          </p>
+          <div className="mt-8 text-sm">
+            © 2025 VendorSync. All rights reserved.
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};

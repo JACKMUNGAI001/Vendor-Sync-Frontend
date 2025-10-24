@@ -176,3 +176,16 @@ function OrderForm() {
                 </div>
               </div>
 
+              {materials.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeMaterialField(index)}
+                  className="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+

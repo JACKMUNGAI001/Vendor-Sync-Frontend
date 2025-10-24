@@ -42,3 +42,29 @@ function OrderList() {
     
     if (user) fetchOrders();
   }, [user, page]);
+
+
+  const updateStatus = async (orderId, status) => {
+    try {
+      await axios.patch(`http://localhost:5000/orders/${orderId}`, 
+        { status }, 
+        {
+          headers: { Authorization: `Bearer ${user.token}` }
+        }
+      );
+      // Update local state
+      setOrders(orders.map(order => 
+        order.id === orderId ? { ...order, status } : order
+      ));
+    } catch (error) {
+      setError(error.response?.data?.message || 'Failed to update order status');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }

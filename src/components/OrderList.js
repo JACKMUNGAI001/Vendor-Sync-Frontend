@@ -162,6 +162,21 @@ function OrderList() {
             </table>
           </div>
 
+           {/* Pagination */}
+           {totalPages > 1 && (
+            <div className="flex justify-between items-center mt-6 px-4">
+              <button
+                onClick={() => setPage(page - 1)}
+                disabled={page === 1}
+                className={`px-4 py-2 text-sm font-medium rounded-md ${
+                  page === 1 
+                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+              >
+                Previous
+              </button>
+
         
 
       

@@ -48,3 +48,37 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Features Section */}
+      <section className="bg-slate-50 py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 text-slate-900">Built for Every Team Member</h2>
+            <p className="text-xl text-slate-600">Three specialized dashboards for seamless collaboration</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Procurement Manager */}
+            <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-shadow">
+              <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                <Building2 className="h-6 w-6 text-blue-600" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-4 text-slate-900">Procurement Manager</h3>
+              <ul className="space-y-3 text-slate-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">✓</span>
+                  <span>Create material requirement lists</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">✓</span>
+                  <span>Invite vendors for quotes</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">✓</span>
+                  <span>Compare and approve quotes</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">✓</span>
+                  <span>Create purchase orders</span>
+                </li>
+              </ul>
+            </div>

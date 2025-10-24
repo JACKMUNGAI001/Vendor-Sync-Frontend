@@ -120,3 +120,18 @@ function OrderForm() {
           )}
         </div>
 
+        {/* Materials List */}
+        <div>
+          <div className="flex justify-between items-center mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Materials List *
+            </label>
+            <button
+              type="button"
+              onClick={addMaterialField}
+              className="bg-green-500 text-white px-3 py-1 rounded-md text-sm hover:bg-green-600"
+            >
+              Add Material
+            </button>
+          </div>
+

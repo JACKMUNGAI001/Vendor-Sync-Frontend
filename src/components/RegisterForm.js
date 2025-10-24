@@ -52,3 +52,15 @@ function RegisterForm() {
           />
           {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
         </div>
+                <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        >
+          Register
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export default RegisterForm;

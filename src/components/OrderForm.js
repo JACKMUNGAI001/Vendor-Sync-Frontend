@@ -31,3 +31,19 @@ function OrderForm() {
     
     if (user) fetchVendors();
   }, [user]);
+
+
+  const addMaterialField = () => {
+    setMaterials([...materials, { name: '', quantity: '', specifications: '' }]);
+  };
+
+  const removeMaterialField = (index) => {
+    setMaterials(materials.filter((_, i) => i !== index));
+  };
+
+  const updateMaterialField = (index, field, value) => {
+    const updatedMaterials = materials.map((material, i) => 
+      i === index ? { ...material, [field]: value } : material
+    );
+    setMaterials(updatedMaterials);
+  };

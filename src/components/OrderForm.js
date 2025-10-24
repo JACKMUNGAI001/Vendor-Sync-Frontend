@@ -189,3 +189,15 @@ function OrderForm() {
           ))}
         </div>
 
+        {/* Delivery Date */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Expected Delivery Date
+          </label>
+          <input
+            type="date"
+            {...register('delivery_date')}
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>}
+

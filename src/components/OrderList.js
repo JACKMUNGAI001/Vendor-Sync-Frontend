@@ -68,3 +68,18 @@ function OrderList() {
       </div>
     );
   }
+
+  return (
+    <div className="p-6 bg-white shadow-lg rounded-lg">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">Orders</h1>
+        <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+          {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+        </span>
+      </div>
+
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
+      )}

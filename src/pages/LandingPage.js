@@ -23,3 +23,28 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </nav>
+
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="text-center max-w-4xl mx-auto">
+          <h1 className="text-5xl font-bold mb-6 text-slate-900">
+            Streamline Your Construction Procurement
+          </h1>
+          <p className="text-xl text-slate-600 mb-8">
+            Say goodbye to spreadsheets and emails. VendorSync puts all your vendor management, 
+            quotes, and orders in one powerful platform.
+          </p>
+          <div className="flex gap-4 justify-center">
+            <Link to="/login">
+              <Button size="lg" className="text-lg px-8">
+                Start Free Trial
+              </Button>
+            </Link>
+            <Link to="/login">
+              <Button size="lg" variant="outline" className="text-lg px-8">
+                Watch Demo
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>

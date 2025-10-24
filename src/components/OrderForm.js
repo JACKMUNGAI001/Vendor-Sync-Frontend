@@ -47,3 +47,25 @@ function OrderForm() {
     );
     setMaterials(updatedMaterials);
   };
+
+  const onSubmit = async (data) => {
+    if (user.role !== 'manager') {
+      setError('Only Procurement Managers can create orders');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      // Convert materials array to object format for material_list
+      const materialList = {};
+      materials.forEach((material, index) => {
+        if (material.name && material.quantity) {
+          materialList[`item_${index + 1}`] = {
+            name: material.name,
+            quantity: material.quantity,
+            specifications: material.specifications
+          };
+        }
+      });

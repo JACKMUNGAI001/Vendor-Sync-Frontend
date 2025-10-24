@@ -201,3 +201,16 @@ function OrderForm() {
           />
         </div>}
 
+        {/* Special Instructions */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Special Instructions
+          </label>
+          <textarea
+            {...register('special_instructions')}
+            rows="3"
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Any special instructions for this order..."
+          />
+        </div>
+

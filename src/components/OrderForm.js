@@ -135,3 +135,44 @@ function OrderForm() {
             </button>
           </div>
 
+          {materials.map((material, index) => (
+            <div key={index} className="border border-gray-200 p-4 rounded-md mb-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Material Name
+                  </label>
+                  <input
+                    type="text"
+                    value={material.name}
+                    onChange={(e) => updateMaterialField(index, 'name', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                    placeholder="e.g., Steel Beams"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Quantity
+                  </label>
+                  <input
+                    type="text"
+                    value={material.quantity}
+                    onChange={(e) => updateMaterialField(index, 'quantity', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                    placeholder="e.g., 100 units"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Specifications
+                  </label>
+                  <input
+                    type="text"
+                    value={material.specifications}
+                    onChange={(e) => updateMaterialField(index, 'specifications', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                    placeholder="e.g., Grade A, 10mm thickness"
+                  />
+                </div>
+              </div>
+

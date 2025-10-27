@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import dayjs from 'dayjs'; // ADD
 
 function OrderList() {
   const { user } = useContext(AuthContext);
@@ -40,6 +41,9 @@ function OrderList() {
         {orders.map(order => (
           <li key={order.id} className="p-2 border-b">
             <p>Order #{order.id}: {order.status}</p>
+            <p className="text-sm text-gray-500">
+              {dayjs(order.created_at).format('MMM D, YYYY')}
+            </p>
             {user.role === 'staff' && (
               <select
                 onChange={(e) => updateStatus(order.id, e.target.value)}

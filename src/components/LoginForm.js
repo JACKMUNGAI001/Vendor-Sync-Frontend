@@ -62,7 +62,7 @@ function LoginForm() {
           >
             <option value="procurement">Procurement Manager</option>
             <option value="vendor">Vendor</option>
-            <option value="admin">Admin</option>
+            <option value="staff">Staff</option>
           </select>
         </div>
 

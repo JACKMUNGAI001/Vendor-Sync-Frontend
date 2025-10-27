@@ -15,7 +15,7 @@ import Search from './pages/Search';
 function App() {
   return (
     <div className="bg-gray-100 p-4">
-      <h1 className="text-2xl font-bold text-blue-600">VendorSync Frontend</h1>
+      <h1 className="text-2xl font-bold text-blue-600">VendorSync</h1>
 
       <AuthProvider>
         <BrowserRouter>

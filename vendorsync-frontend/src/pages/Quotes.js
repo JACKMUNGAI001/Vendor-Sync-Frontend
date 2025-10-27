@@ -3,6 +3,7 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import QuoteForm from '../components/QuoteForm';
 import CloudinaryUpload from '../components/CloudinaryUpload';
+import dayjs from 'dayjs'; // ADD
 
 function Quotes() {
   const { user } = useContext(AuthContext);
@@ -143,6 +144,9 @@ function Quotes() {
                       <div>
                         <h3 className="text-lg font-semibold">Order #{order.id}</h3>
                         <p className="text-gray-600">Materials: {order.material_list?.length || 0} items</p>
+                        <p className="text-sm text-gray-500">
+                          Created: {dayjs(order.created_at).format('MMM D, YYYY')}
+                        </p>
                         <p className="text-sm text-gray-500">Status: <span className="capitalize">{order.status}</span></p>
                       </div>
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${
@@ -222,7 +226,7 @@ function Quotes() {
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {new Date(quote.created_at).toLocaleDateString()}
+                            {dayjs(quote.created_at).format('MMM D, YYYY')}
                           </td>
                           {user?.role === 'manager' && quote.status === 'pending' && (
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
@@ -255,6 +259,9 @@ function Quotes() {
               {orders.map(order => (
                 <div key={order.id} className="card">
                   <h3 className="text-lg font-semibold mb-4">Order #{order.id}</h3>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Created: {dayjs(order.created_at).format('MMM D, YYYY')}
+                  </p>
                   <CloudinaryUpload 
                     orderId={order.id}
                     fileType="invoice"

@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { Building2, Users, Package, FileText } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 
-export const LandingPage: React.FC = () => {
+export const LandingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      {/* Navigation */}
+
       <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -24,7 +24,6 @@ export const LandingPage: React.FC = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="text-5xl font-bold mb-6 text-slate-900">
@@ -57,7 +56,7 @@ export const LandingPage: React.FC = () => {
             <p className="text-xl text-slate-600">Three specialized dashboards for seamless collaboration</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Procurement Manager */}
+
             <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-shadow">
               <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
                 <Building2 className="h-6 w-6 text-blue-600" />
@@ -79,6 +78,40 @@ export const LandingPage: React.FC = () => {
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 mt-1">✓</span>
                   <span>Create purchase orders</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-1">✓</span>
+                  <span>Assign orders to staff</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Staff */}
+            <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-shadow">
+              <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center mb-6">
+                <Users className="h-6 w-6 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-4 text-slate-900">Staff</h3>
+              <ul className="space-y-3 text-slate-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 mt-1">✓</span>
+                  <span>Track assigned orders</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 mt-1">✓</span>
+                  <span>Update order status</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 mt-1">✓</span>
+                  <span>Upload delivery receipts</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 mt-1">✓</span>
+                  <span>Inspect deliveries</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 mt-1">✓</span>
+                  <span>Communicate with vendors</span>
                 </li>
               </ul>
             </div>
@@ -106,13 +139,16 @@ export const LandingPage: React.FC = () => {
                   <span className="text-purple-600 mt-1">✓</span>
                   <span>Confirm deliveries</span>
                 </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Upload invoices</span>
+                </li>
               </ul>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="bg-gradient-to-r from-blue-600 to-cyan-500 py-20">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-6 text-white">Ready to Transform Your Procurement?</h2>

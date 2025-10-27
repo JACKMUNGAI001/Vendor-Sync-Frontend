@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import algoliasearch from 'algoliasearch/lite';
 
-// Initialize Algolia client with actual credentials
 const client = algoliasearch('NUF1223K4R', '0ba760722de94835fbcc6eda8b20d872');
 const index = client.initIndex('vendorsync');
 
@@ -53,10 +52,10 @@ function SearchBar() {
 
   const getResultIcon = (type) => {
     switch (type) {
-      case 'vendor': return '🏢';
-      case 'order': return '📦';
-      case 'quote': return '💰';
-      default: return '📄';
+      case 'vendor': return '';
+      case 'order': return '';
+      case 'quote': return '';
+      default: return '';
     }
   };
 

@@ -12,10 +12,10 @@ function RegisterForm() {
   const onSubmit = async (data) => {
     try {
       const response = await axios.post('http://localhost:5000/signup', data);
-      login(response.data);
+      await login(data.email, data.password);
       navigate('/dashboard');
     } catch (error) {
-      console.error('Signup failed:', error.response?.data || error.message);
+      console.error('Signup failed:', error?.response?.data || error?.message || error);
     }
   };
     return (

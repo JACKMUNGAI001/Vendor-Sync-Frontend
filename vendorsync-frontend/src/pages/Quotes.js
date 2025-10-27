@@ -17,19 +17,16 @@ function Quotes() {
 
       try {
         if (user.role === 'vendor') {
-          // Fetch orders available for quoting
           const ordersResponse = await axios.get('http://localhost:5000/orders/vendor', {
             headers: { Authorization: `Bearer ${user.token}` }
           });
           setOrders(ordersResponse.data);
 
-          // Fetch vendor's existing quotes
           const quotesResponse = await axios.get('http://localhost:5000/quotes/vendor', {
             headers: { Authorization: `Bearer ${user.token}` }
           });
           setQuotes(quotesResponse.data);
         } else if (user.role === 'manager') {
-          // Fetch quotes for review
           const quotesResponse = await axios.get('http://localhost:5000/quotes', {
             headers: { Authorization: `Bearer ${user.token}` }
           });
@@ -92,7 +89,6 @@ function Quotes() {
           </p>
         </div>
 
-        {/* Tab Navigation */}
         <div className="border-b border-gray-200 mb-6">
           <nav className="-mb-px flex space-x-8">
             {user?.role === 'vendor' && (
@@ -132,9 +128,7 @@ function Quotes() {
           </nav>
         </div>
 
-        {/* Tab Content */}
         <div className="space-y-6">
-          {/* Submit Quote Tab (Vendor only) */}
           {activeTab === 'submit' && user?.role === 'vendor' && (
             <div className="grid gap-6">
               <h2 className="text-xl font-semibold">Available Orders for Quoting</h2>
@@ -169,7 +163,6 @@ function Quotes() {
             </div>
           )}
 
-          {/* Review Quotes Tab */}
           {activeTab === 'review' && (
             <div className="card">
               <h2 className="text-xl font-semibold mb-6">
@@ -256,7 +249,6 @@ function Quotes() {
             </div>
           )}
 
-          {/* Document Uploads Tab (Vendor only) */}
           {activeTab === 'uploads' && user?.role === 'vendor' && (
             <div className="grid gap-6">
               <h2 className="text-xl font-semibold">Document Uploads</h2>

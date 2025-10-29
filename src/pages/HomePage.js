@@ -6,6 +6,7 @@ import { Button } from '../components/ui/Button';
 export const HomePage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+
       <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -87,12 +88,74 @@ export const HomePage = () => {
         </div>
       </section>
 
+      <section className="bg-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-8 text-slate-900">Quick Test Access</h2>
+          <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
+            Use these test accounts to explore the different user dashboards:
+          </p>
+          
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+              <Building2 className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold mb-3 text-blue-900">Manager Dashboard</h3>
+              <p className="text-blue-700 mb-4">
+                Email: <strong>manager@vendorsync.com</strong><br/>
+                Password: <strong>password123</strong>
+              </p>
+              <Link to="/login">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                  Access Manager Dashboard
+                </Button>
+              </Link>
+            </div>
+
+            <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+              <Users className="h-12 w-12 text-green-600 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold mb-3 text-green-900">Staff Dashboard</h3>
+              <p className="text-green-700 mb-4">
+                Email: <strong>staff@vendorsync.com</strong><br/>
+                Password: <strong>password123</strong>
+              </p>
+              <Link to="/login">
+                <Button className="w-full bg-green-600 hover:bg-green-700">
+                  Access Staff Dashboard
+                </Button>
+              </Link>
+            </div>
+
+            <div className="bg-purple-50 rounded-xl p-6 border border-purple-200">
+              <Package className="h-12 w-12 text-purple-600 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold mb-3 text-purple-900">Vendor Dashboard</h3>
+              <p className="text-purple-700 mb-4">
+                Email: <strong>vendor@vendorsync.com</strong><br/>
+                Password: <strong>password123</strong>
+              </p>
+              <Link to="/login">
+                <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                  Access Vendor Dashboard
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-8 text-sm text-slate-500">
+            <p>These are pre-configured test accounts with sample data.</p>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-gradient-to-r from-blue-600 to-cyan-500 py-20">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-6 text-white">Ready to Transform Your Procurement?</h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Join leading construction companies who save time and money with VendorSync
           </p>
+          <Link to="/register">
+            <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
+              Get Started Today
+            </Button>
+          </Link>
         </div>
       </section>
 

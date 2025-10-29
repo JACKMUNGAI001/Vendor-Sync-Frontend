@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 function Dashboard() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -22,7 +22,12 @@ function Dashboard() {
                 setError('');
             } catch (error) {
                 console.error('Dashboard error:', error);
-                setError(error.response?.data?.message || 'Failed to load dashboard');
+                if (error.response?.status === 401) {
+                    setError('Session expired. Please log in again.');
+                    logout();
+                } else {
+                    setError(error.response?.data?.message || 'Failed to load dashboard');
+                }
             } finally {
                 setLoading(false);
             }
@@ -31,7 +36,7 @@ function Dashboard() {
         if (user && user.token) {
             fetchData();
         }
-    }, [user]);
+    }, [user, logout]);
 
     if (loading) {
         return (
@@ -52,21 +57,6 @@ function Dashboard() {
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
                     <p className="text-gray-600 mb-6">Welcome back, {user.firstName}!</p>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div className="bg-blue-50 p-4 rounded-lg">
-                            <h3 className="font-semibold text-blue-800">Role</h3>
-                            <p className="text-2xl font-bold text-blue-600 capitalize">{user.role}</p>
-                        </div>
-                        <div className="bg-green-50 p-4 rounded-lg">
-                            <h3 className="font-semibold text-green-800">Items</h3>
-                            <p className="text-2xl font-bold text-green-600">{data.length}</p>
-                        </div>
-                        <div className="bg-purple-50 p-4 rounded-lg">
-                            <h3 className="font-semibold text-purple-800">Status</h3>
-                            <p className="text-2xl font-bold text-purple-600">Active</p>
-                        </div>
-                    </div>
-
                     {error && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
                             {error}

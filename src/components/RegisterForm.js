@@ -21,7 +21,7 @@ function RegisterForm() {
         role: data.role,
       };
 
-      await axios.post('https://vendor-sync-backend-4bre.onrender.com/signup', payload);
+      await axios.post('https://vendor-sync-backend-4bre.onrender.com/register', payload);
       await login(data.email, data.password, data.role);
       navigate('/dashboard');
     } catch (error) {

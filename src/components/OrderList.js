@@ -11,7 +11,7 @@ function OrderList() {
     const fetchOrders = async () => {
       try {
         const endpoint = user.role === 'vendor' ? '/orders/vendor' : '/orders';
-        const response = await axios.get(`http://localhost:5000${endpoint}?page=${page}`, {
+        const response = await axios.get(`https://vendor-sync-backend-4bre.onrender.com${endpoint}?page=${page}`, {
           headers: { Authorization: `Bearer ${user.token}` }
         });
         setOrders(response.data);
@@ -24,7 +24,7 @@ function OrderList() {
 
   const updateStatus = async (orderId, status) => {
     try {
-      await axios.patch(`http://localhost:5000/orders/${orderId}`, { status }, {
+      await axios.patch(`https://vendor-sync-backend-4bre.onrender.com/orders/${orderId}`, { status }, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       setOrders(orders.map(o => o.id === orderId ? { ...o, status } : o));

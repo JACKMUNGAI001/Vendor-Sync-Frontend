@@ -9,7 +9,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/dashboard', {
+        const response = await axios.get('https://vendor-sync-backend-4bre.onrender.com/dashboard', {
           headers: { Authorization: `Bearer ${user.token}` }
         });
         setData(response.data);

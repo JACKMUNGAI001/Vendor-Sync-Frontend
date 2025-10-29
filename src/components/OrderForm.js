@@ -11,7 +11,7 @@ function OrderForm() {
 
   const onSubmit = async (data) => {
     try {
-      await axios.post('http://localhost:5000/orders', {
+      await axios.post('https://vendor-sync-backend-4bre.onrender.com/orders', {
         material_list: JSON.parse(data.material_list),
         vendor_id: data.vendor_id
       }, {

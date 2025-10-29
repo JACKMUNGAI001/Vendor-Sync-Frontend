@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password, role) => {
     try {
       const payload = role ? { email, password, role } : { email, password };
-      const response = await axios.post('http://localhost:5000/login', payload);
+      const response = await axios.post('https://vendor-sync-backend-4bre.onrender.com/login', payload);
       setUser({ token: response.data.token, role: response.data.role });
       return true;
     } catch (error) {

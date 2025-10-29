@@ -1,14 +1,10 @@
 import React, { createContext, useState, useContext } from 'react';
 import axios from 'axios';
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
 
 export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
+    return useContext(AuthContext);
 };
 
 export const AuthProvider = ({ children }) => {
@@ -26,19 +22,19 @@ export const AuthProvider = ({ children }) => {
             const userData = {
                 token: response.data.token,
                 email: response.data.user.email,
-                role: response.data.user.role,
                 firstName: response.data.user.first_name,
-                lastName: response.data.user.last_name
+                lastName: response.data.user.last_name,
+                role: response.data.user.role
             };
             
             setUser(userData);
             localStorage.setItem('user', JSON.stringify(userData));
-            setLoading(false);
-            return { success: true, data: response.data };
+            return { success: true };
         } catch (error) {
-            setLoading(false);
-            const message = error?.response?.data?.message || error.message || 'Login failed';
+            const message = error.response?.data?.message || 'Login failed';
             return { success: false, error: message };
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -47,21 +43,11 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('user');
     };
 
-    const checkAuth = () => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-            return true;
-        }
-        return false;
-    };
-
     const value = {
         user,
         login,
         logout,
-        loading,
-        checkAuth
+        loading
     };
 
     return (
@@ -70,5 +56,3 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
-
-export default AuthContext;

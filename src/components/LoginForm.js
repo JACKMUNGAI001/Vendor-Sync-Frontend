@@ -35,13 +35,7 @@ function LoginForm() {
                     <input
                         id="email"
                         type="email"
-                        {...register('email', { 
-                            required: 'Email is required',
-                            pattern: {
-                                value: /^\S+@\S+$/i,
-                                message: 'Invalid email address'
-                            }
-                        })}
+                        {...register('email', { required: 'Email is required' })}
                         className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="your.email@company.com"
                     />
@@ -53,13 +47,7 @@ function LoginForm() {
                     <input
                         id="password"
                         type="password"
-                        {...register('password', { 
-                            required: 'Password is required',
-                            minLength: {
-                                value: 6,
-                                message: 'Password must be at least 6 characters'
-                            }
-                        })}
+                        {...register('password', { required: 'Password is required' })}
                         className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="••••••••"
                     />
@@ -74,7 +62,7 @@ function LoginForm() {
 
                 <button
                     type="submit"
-                    className="w-full mt-2 bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition disabled:bg-blue-300"
+                    className="w-full mt-2 bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition"
                 >
                     Log In
                 </button>

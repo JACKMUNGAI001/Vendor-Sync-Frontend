@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Building2, Users, Package, FileText } from 'lucide-react';
+import { Building2, Users, Package } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 
 export const HomePage = () => {
@@ -48,26 +48,11 @@ export const HomePage = () => {
               </div>
               <h3 className="text-2xl font-semibold mb-4 text-slate-900">Procurement Manager</h3>
               <ul className="space-y-3 text-slate-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">✓</span>
-                  <span>Create material requirement lists</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">✓</span>
-                  <span>Invite vendors for quotes</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">✓</span>
-                  <span>Compare and approve quotes</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">✓</span>
-                  <span>Create purchase orders</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">✓</span>
-                  <span>Assign orders to staff</span>
-                </li>
+                <li className="flex items-start gap-2"><span className="text-blue-600 mt-1">✓</span><span>Create material requirement lists</span></li>
+                <li className="flex items-start gap-2"><span className="text-blue-600 mt-1">✓</span><span>Invite vendors for quotes</span></li>
+                <li className="flex items-start gap-2"><span className="text-blue-600 mt-1">✓</span><span>Compare and approve quotes</span></li>
+                <li className="flex items-start gap-2"><span className="text-blue-600 mt-1">✓</span><span>Create purchase orders</span></li>
+                <li className="flex items-start gap-2"><span className="text-blue-600 mt-1">✓</span><span>Assign orders to staff</span></li>
               </ul>
             </div>
 
@@ -77,26 +62,11 @@ export const HomePage = () => {
               </div>
               <h3 className="text-2xl font-semibold mb-4 text-slate-900">Staff</h3>
               <ul className="space-y-3 text-slate-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span>Track assigned orders</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span>Update order status</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span>Upload delivery receipts</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span>Inspect deliveries</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
-                  <span>Communicate with vendors</span>
-                </li>
+                <li className="flex items-start gap-2"><span className="text-green-600 mt-1">✓</span><span>Track assigned orders</span></li>
+                <li className="flex items-start gap-2"><span className="text-green-600 mt-1">✓</span><span>Update order status</span></li>
+                <li className="flex items-start gap-2"><span className="text-green-600 mt-1">✓</span><span>Upload delivery receipts</span></li>
+                <li className="flex items-start gap-2"><span className="text-green-600 mt-1">✓</span><span>Inspect deliveries</span></li>
+                <li className="flex items-start gap-2"><span className="text-green-600 mt-1">✓</span><span>Communicate with vendors</span></li>
               </ul>
             </div>
 
@@ -106,26 +76,11 @@ export const HomePage = () => {
               </div>
               <h3 className="text-2xl font-semibold mb-4 text-slate-900">Vendor</h3>
               <ul className="space-y-3 text-slate-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
-                  <span>Register and get approved</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
-                  <span>Receive quote requests</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
-                  <span>Submit competitive quotes</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
-                  <span>Confirm deliveries</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
-                  <span>Upload invoices</span>
-                </li>
+                <li className="flex items-start gap-2"><span className="text-purple-600 mt-1">✓</span><span>Register and get approved</span></li>
+                <li className="flex items-start gap-2"><span className="text-purple-600 mt-1">✓</span><span>Receive quote requests</span></li>
+                <li className="flex items-start gap-2"><span className="text-purple-600 mt-1">✓</span><span>Submit competitive quotes</span></li>
+                <li className="flex items-start gap-2"><span className="text-purple-600 mt-1">✓</span><span>Confirm deliveries</span></li>
+                <li className="flex items-start gap-2"><span className="text-purple-600 mt-1">✓</span><span>Upload invoices</span></li>
               </ul>
             </div>
           </div>
@@ -138,15 +93,10 @@ export const HomePage = () => {
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Join leading construction companies who save time and money with VendorSync
           </p>
-          <Link to="/login">
-            <Button size="lg" variant="secondary" className="text-lg px-8 bg-white text-blue-600 hover:bg-gray-100">
-              Start Your Free Trial
-            </Button>
-          </Link>
         </div>
       </section>
 
-       <footer className="bg-slate-900 text-slate-400 py-12">
+      <footer className="bg-slate-900 text-slate-400 py-12">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Building2 className="h-6 w-6 text-blue-400" />

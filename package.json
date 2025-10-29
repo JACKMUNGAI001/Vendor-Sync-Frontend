@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI=false react-scripts build",
-    "build:strict": "CI=true react-scripts build",
+    "build": "react-scripts build",
     "build:css": "postcss src/index.css -o src/index.css"
   },
   "dependencies": {

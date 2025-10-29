@@ -1,31 +1,36 @@
-import React, { useContext } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate, Link } from 'react-router-dom';
-import { Building2 } from 'lucide-react';
-import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, Link } from "react-router-dom";
+import { Building2 } from "lucide-react";
+import axios from "axios";
 
 function RegisterForm() {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm({ mode: 'onTouched' });
-  const { login } = useContext(AuthContext);
+  const { register, handleSubmit, watch, formState: { errors } } = useForm({ mode: "onTouched" });
   const navigate = useNavigate();
-  const password = watch('password', '');
+  const password = watch("password", "");
 
   const onSubmit = async (data) => {
     try {
+      const [firstName, lastName = ""] = data.fullName.split(" ");
       const payload = {
-        fullName: data.fullName,
+        first_name: firstName,
+        last_name: lastName,
         email: data.email,
-        companyName: data.companyName,
         password: data.password,
-        role: data.role,
+        phone: data.phone || "",
+        company_name: data.companyName || ""
       };
 
-      await axios.post('https://vendor-sync-backend-4bre.onrender.com/register', payload);
-      await login(data.email, data.password, data.role);
-      navigate('/dashboard');
+      const res = await axios.post("https://vendor-sync-backend-4bre.onrender.com/register", payload);
+      if (res.status === 201) {
+        alert("Registration successful! You can now log in.");
+        navigate("/login");
+      } else {
+        alert(res.data.message || "Registration failed. Please try again.");
+      }
     } catch (error) {
-      console.error('Signup failed:', error?.response?.data || error?.message || error);
+      console.error("Signup failed:", error?.response?.data || error?.message || error);
+      alert(error?.response?.data?.message || "An error occurred during signup.");
     }
   };
 
@@ -43,7 +48,7 @@ function RegisterForm() {
           <input
             id="fullName"
             type="text"
-            {...register('fullName', { required: 'Full name is required' })}
+            {...register("fullName", { required: "Full name is required" })}
             className="mt-1 w-full p-3 bg-gray-100 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="John Doe"
           />
@@ -55,7 +60,7 @@ function RegisterForm() {
           <input
             id="email"
             type="email"
-            {...register('email', { required: 'Email is required', pattern: { value: /^\S+@\S+$/i, message: 'Invalid email' } })}
+            {...register("email", { required: "Email is required", pattern: { value: /^\S+@\S+$/i, message: "Invalid email" } })}
             className="mt-1 w-full p-3 bg-gray-100 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="your.email@company.com"
           />
@@ -67,9 +72,21 @@ function RegisterForm() {
           <input
             id="companyName"
             type="text"
-            {...register('companyName')}
+            {...register("companyName", { required: "Company name is required" })}
             className="mt-1 w-full p-3 bg-gray-100 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="ABC Construction Co."
+          />
+          {errors.companyName && <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>}
+        </div>
+
+        <div>
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
+          <input
+            id="phone"
+            type="text"
+            {...register("phone")}
+            className="mt-1 w-full p-3 bg-gray-100 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="0712 345 678"
           />
         </div>
 
@@ -78,7 +95,7 @@ function RegisterForm() {
           <input
             id="password"
             type="password"
-            {...register('password', { required: 'Password is required', minLength: { value: 6, message: 'Min 6 characters' } })}
+            {...register("password", { required: "Password is required", minLength: { value: 6, message: "Min 6 characters" } })}
             className="mt-1 w-full p-3 bg-gray-100 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="••••••••"
           />
@@ -90,25 +107,14 @@ function RegisterForm() {
           <input
             id="confirmPassword"
             type="password"
-            {...register('confirmPassword', { required: 'Please confirm your password', validate: (value) => value === password || 'Passwords do not match' })}
+            {...register("confirmPassword", {
+              required: "Please confirm your password",
+              validate: (value) => value === password || "Passwords do not match"
+            })}
             className="mt-1 w-full p-3 bg-gray-100 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="••••••••"
           />
           {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>}
-        </div>
-
-        <div>
-          <label htmlFor="role" className="block text-sm font-medium text-gray-700">Register As</label>
-          <select
-            id="role"
-            {...register('role')}
-            className="mt-1 w-full p-3 bg-gray-100 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            defaultValue="procurement"
-          >
-            <option value="procurement">Procurement Manager</option>
-            <option value="vendor">Vendor</option>
-            <option value="staff">Staff</option>
-          </select>
         </div>
 
         <button
@@ -119,7 +125,8 @@ function RegisterForm() {
         </button>
 
         <div className="text-center mt-3 text-sm text-gray-600">
-          Already have an account? <Link to="/login" className="text-blue-600 underline">Log in here</Link>
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-600 underline">Log in here</Link>
         </div>
       </form>
     </div>

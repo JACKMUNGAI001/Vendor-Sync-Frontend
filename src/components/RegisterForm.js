@@ -22,12 +22,12 @@ function RegisterForm() {
       };
 
       const res = await axios.post("https://vendor-sync-backend-4bre.onrender.com/register", payload);
-      if (res.status === 201) {
-        alert("Registration successful! You can now log in.");
-        navigate("/login");
-      } else {
-        alert(res.data.message || "Registration failed. Please try again.");
-      }
+     if (res.status === 200 || res.status === 201) {
+       alert("Registration successful! You can now log in.");
+       navigate("/login");
+     } else {
+       alert(res.data.message || "Registration failed. Please try again.");
+     }
     } catch (error) {
       console.error("Signup failed:", error?.response?.data || error?.message || error);
       alert(error?.response?.data?.message || "An error occurred during signup.");

@@ -1,93 +1,47 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import axios from 'axios';
+import React, { createContext, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 const AuthContext = createContext();
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
-
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
-    if (token && userData) {
-      setUser({ ...JSON.parse(userData), token });
-    }
-    setLoading(false);
-  }, []);
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")) || null);
+  const navigate = useNavigate();
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('https://vendor-sync-backend-4bre.onrender.com/login', {
-        email,
-        password
-      });
-      
-      const userData = {
-        token: response.data.token,
-        ...response.data.user
-      };
-      
-      setUser(userData);
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      
-      return { success: true, data: response.data };
+      const response = await api.post("/api/login", { email, password });
+      const { token, user } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(user);
+      navigate("/dashboard");
     } catch (error) {
-      const message = error?.response?.data?.message || error.message || 'Login failed';
-      return { success: false, error: message };
+      alert("Invalid credentials or server error");
     }
   };
 
-  const register = async (userData) => {
+  const register = async (data) => {
     try {
-      const response = await axios.post('https://vendor-sync-backend-4bre.onrender.com/register', userData);
-      
-      if (response.data.token) {
-        const user = {
-          token: response.data.token,
-          ...response.data.user
-        };
-        
-        setUser(user);
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-      }
-      
-      return { success: true, data: response.data };
+      await api.post("/api/register", data);
+      navigate("/login");
     } catch (error) {
-      const message = error?.response?.data?.message || error.message || 'Registration failed';
-      return { success: false, error: message };
+      alert("Registration failed");
     }
   };
 
   const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-  };
-
-  const value = {
-    user,
-    login,
-    register,
-    logout,
-    loading
+    navigate("/login");
   };
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{ user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export default AuthContext;
+export const useAuth = () => useContext(AuthContext);

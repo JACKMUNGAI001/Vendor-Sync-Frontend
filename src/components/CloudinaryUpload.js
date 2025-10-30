@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
+import { Upload, FileText, CheckCircle, XCircle } from 'lucide-react';
 
-function CloudinaryUpload({ onUploadSuccess, orderId, fileType = 'invoice' }) {
+const CloudinaryUpload = ({ onUploadSuccess, orderId, fileType = 'invoice' }) => {
+  const { user } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadError, setUploadError] = useState('');
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
@@ -11,61 +15,55 @@ function CloudinaryUpload({ onUploadSuccess, orderId, fileType = 'invoice' }) {
 
     const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
     if (!allowedTypes.includes(file.type)) {
-      alert('Please upload a JPEG, PNG, or PDF file');
+      setUploadError('Please upload a JPEG, PNG, or PDF file');
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      alert('File size must be less than 5MB');
+      setUploadError('File size must be less than 5MB');
       return;
     }
 
     setIsUploading(true);
     setUploadProgress(0);
+    setUploadError('');
+    setUploadSuccess(false);
 
     try {
-      // 1. Get signed upload params from backend
-      const authResponse = await axios.post(
-        'http://localhost:5000/documents/upload',
-        { order_id: orderId, file_type: fileType },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-      );
-
-      const { upload_url, timestamp, signature, upload_preset, folder, api_key } = authResponse.data;
-
-      // 2. Upload directly to Cloudinary
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('timestamp', timestamp);
-      formData.append('signature', signature);
-      formData.append('upload_preset', upload_preset);
-      formData.append('folder', folder);
-      formData.append('api_key', api_key);
+      formData.append('upload_preset', 'vendorsync');
+      formData.append('folder', 'vendorsync');
 
-      const cloudinaryResponse = await axios.post(upload_url, formData, {
-        onUploadProgress: (progressEvent) => {
-          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          setUploadProgress(progress);
-        },
+      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/demo/auto/upload', {
+        method: 'POST',
+        body: formData,
       });
 
-      // 3. Save document record
-      const documentResponse = await axios.post(
-        'http://localhost:5000/documents',
-        {
-          order_id: orderId,
-          file_url: cloudinaryResponse.data.secure_url,
-          file_type: fileType,
-          public_id: cloudinaryResponse.data.public_id
-        },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-      );
+      if (!cloudinaryResponse.ok) {
+        throw new Error('Cloudinary upload failed');
+      }
 
-      if (onUploadSuccess) onUploadSuccess(documentResponse.data);
-      alert('File uploaded successfully!');
+      const cloudinaryData = await cloudinaryResponse.json();
+
+      setUploadProgress(100);
+      setUploadSuccess(true);
+
+      if (onUploadSuccess) {
+        onUploadSuccess({
+          file_url: cloudinaryData.secure_url,
+          public_id: cloudinaryData.public_id,
+          file_type: fileType
+        });
+      }
+
+      setTimeout(() => {
+        setUploadSuccess(false);
+      }, 3000);
+
     } catch (error) {
       console.error('Upload error:', error);
-      alert('Failed to upload. Please try again.');
+      setUploadError('Failed to upload file. Please try again.');
     } finally {
       setIsUploading(false);
       setUploadProgress(0);
@@ -73,42 +71,78 @@ function CloudinaryUpload({ onUploadSuccess, orderId, fileType = 'invoice' }) {
     }
   };
 
+  const getFileTypeDisplay = () => {
+    switch (fileType) {
+      case 'invoice': return 'Invoice';
+      case 'receipt': return 'Receipt';
+      case 'delivery_note': return 'Delivery Note';
+      default: return 'Document';
+    }
+  };
+
   return (
-    <div className="card p-6 bg-white rounded-lg shadow">
-      <h3 className="text-lg font-semibold mb-4">Upload {fileType}</h3>
+    <div className="bg-white rounded-lg shadow p-6">
+      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <FileText className="h-5 w-5 text-blue-600" />
+        Upload {getFileTypeDisplay()}
+      </h3>
       
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
         <input
           type="file"
-          id="file-upload"
+          id={`file-upload-${orderId}-${fileType}`}
           onChange={handleFileUpload}
           disabled={isUploading}
           accept=".jpg,.jpeg,.png,.pdf"
           className="hidden"
         />
         
-        <label htmlFor="file-upload" className={`cursor-pointer block ${isUploading ? 'opacity-50' : ''}`}>
-          <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" 
-              strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span className="mt-2 block text-sm font-medium text-gray-900">
-            {isUploading ? 'Uploading...' : 'Choose file'}
-          </span>
-          <span className="mt-1 block text-xs text-gray-500">JPEG, PNG, PDF (Max 5MB)</span>
+        <label 
+          htmlFor={`file-upload-${orderId}-${fileType}`}
+          className={`cursor-pointer block ${isUploading ? 'opacity-50' : ''}`}
+        >
+          {uploadSuccess ? (
+            <div className="flex flex-col items-center">
+              <CheckCircle className="h-12 w-12 text-green-500 mb-2" />
+              <span className="text-sm font-medium text-green-600">Upload Successful!</span>
+              <span className="text-xs text-green-500 mt-1">File uploaded successfully</span>
+            </div>
+          ) : isUploading ? (
+            <div className="flex flex-col items-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-2"></div>
+              <span className="text-sm font-medium text-gray-900">Uploading...</span>
+              <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                <div 
+                  className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${uploadProgress}%` }}
+                ></div>
+              </div>
+              <span className="text-xs text-gray-500 mt-1">{uploadProgress}%</span>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center">
+              <Upload className="h-12 w-12 text-gray-400 mb-2" />
+              <span className="text-sm font-medium text-gray-900">Choose file to upload</span>
+              <span className="text-xs text-gray-500 mt-1">JPEG, PNG, PDF (Max 5MB)</span>
+            </div>
+          )}
         </label>
 
-        {isUploading && (
-          <div className="mt-4">
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div className="bg-blue-500 h-2 rounded-full transition-all" style={{ width: `${uploadProgress}%` }}></div>
-            </div>
-            <p className="text-sm text-gray-600 mt-2">{uploadProgress}%</p>
+        {uploadError && (
+          <div className="mt-4 flex items-center justify-center gap-2 text-red-600 text-sm">
+            <XCircle className="h-4 w-4" />
+            {uploadError}
           </div>
         )}
       </div>
+
+      <div className="mt-4 text-xs text-gray-500">
+        <p>• Supported formats: JPG, PNG, PDF</p>
+        <p>• Maximum file size: 5MB</p>
+        <p>• Files are securely stored in Cloudinary</p>
+      </div>
     </div>
   );
-}
+};
 
 export default CloudinaryUpload;

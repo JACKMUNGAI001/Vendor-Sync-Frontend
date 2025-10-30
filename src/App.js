@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
@@ -19,11 +20,53 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/orders/new" element={<NewOrder />} />
-          <Route path="/quotes" element={<Quotes />} />
-          <Route path="/search" element={<Search />} />
+          
+          {/* Protected Routes */}
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route 
+            path="/orders" 
+            element={
+              <ProtectedRoute>
+                <Orders />
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route 
+            path="/orders/new" 
+            element={
+              <ProtectedRoute requiredRole="manager">
+                <NewOrder />
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route 
+            path="/quotes" 
+            element={
+              <ProtectedRoute requiredRole="vendor">
+                <Quotes />
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route 
+            path="/search" 
+            element={
+              <ProtectedRoute>
+                <Search />
+              </ProtectedRoute>
+            } 
+          />
+          
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

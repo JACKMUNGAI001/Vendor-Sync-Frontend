@@ -1,20 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import { Building2 } from "lucide-react";
-import axios from "axios";
+import { useAuth } from '../context/AuthContext';
 
-function RegisterForm() {
+const RegisterForm = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm({ mode: "onTouched" });
+  const { register: registerUser } = useAuth();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const password = watch("password", "");
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
+    setSubmitError('');
+    
     try {
-      const nameParts = data.fullName.split(" ");
-      const firstName = nameParts[0] || "";
-      const lastName = nameParts.slice(1).join(" ") || "";
-      
+      const [firstName, lastName = ""] = data.fullName.split(" ");
       const payload = {
         first_name: firstName,
         last_name: lastName,
@@ -24,18 +27,17 @@ function RegisterForm() {
         company_name: data.companyName || ""
       };
 
-      const response = await axios.post("https://vendor-sync-backend-4bre.onrender.com/register", payload);
+      const result = await registerUser(payload);
       
-      if (response.status === 201) {
-        alert("Registration successful! You can now log in.");
-        navigate("/login");
+      if (result.success) {
+        navigate('/dashboard');
       } else {
-        alert(response.data.message || "Registration failed. Please try again.");
+        setSubmitError(result.error);
       }
     } catch (error) {
-      console.error("Signup failed:", error);
-      const errorMessage = error.response?.data?.message || error.message || "An error occurred during signup.";
-      alert(errorMessage);
+      setSubmitError("An unexpected error occurred during registration.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -122,20 +124,27 @@ function RegisterForm() {
           {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>}
         </div>
 
+        {submitError && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            {submitError}
+          </div>
+        )}
+
         <button
           type="submit"
-          className="w-full mt-2 bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition"
+          disabled={isLoading}
+          className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition disabled:bg-blue-300 disabled:cursor-not-allowed"
         >
-          Create Account
+          {isLoading ? 'Creating Account...' : 'Create Account'}
         </button>
 
-        <div className="text-center mt-3 text-sm text-gray-600">
+        <div className="text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">Log in here</Link>
+          <Link to="/login" className="text-blue-600 underline">Log in here</Link>
         </div>
       </form>
     </div>
   );
-}
+};
 
 export default RegisterForm;

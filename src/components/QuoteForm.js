@@ -33,7 +33,7 @@ const QuoteForm = ({ orderId, onSubmitSuccess, onCancel }) => {
         notes: data.notes || ''
       };
 
-      const response = await fetch('https://vendor-sync-backend-4bre.onrender.com/quotes', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/quotes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

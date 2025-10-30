@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Building2, FileText, DollarSign } from 'lucide-react';
+import { Search, Building2, FileText, DollarSign, Package } from 'lucide-react';
+import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const SearchBar = () => {
   const [query, setQuery] = useState('');
@@ -8,6 +10,7 @@ const SearchBar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const searchRef = useRef(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -31,35 +34,14 @@ const SearchBar = () => {
 
     setIsLoading(true);
     try {
-      const mockResults = [
-        {
-          id: 1,
-          type: 'vendor',
-          name: 'ABC Construction Supplies',
-          contact_email: 'contact@abcconstruction.com',
-          status: 'approved'
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/search`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
         },
-        {
-          id: 2,
-          type: 'order',
-          name: 'Order #1001 - Steel Beams',
-          material_list: 'Steel Beams, Concrete',
-          status: 'pending'
-        },
-        {
-          id: 3,
-          type: 'quote',
-          name: 'Quote for Electrical Materials',
-          price: 12500,
-          status: 'submitted'
-        }
-      ].filter(item => 
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (item.contact_email && item.contact_email.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (item.material_list && item.material_list.toLowerCase().includes(searchQuery.toLowerCase()))
-      );
+        params: { query: searchQuery },
+      });
       
-      setResults(mockResults);
+      setResults(response.data);
       setShowResults(true);
     } catch (error) {
       console.error('Search error:', error);
@@ -74,6 +56,7 @@ const SearchBar = () => {
       case 'vendor': return <Building2 className="h-4 w-4" />;
       case 'order': return <FileText className="h-4 w-4" />;
       case 'quote': return <DollarSign className="h-4 w-4" />;
+      case 'requirement': return <Package className="h-4 w-4" />;
       default: return <FileText className="h-4 w-4" />;
     }
   };
@@ -83,6 +66,7 @@ const SearchBar = () => {
       case 'vendor': return 'text-blue-600';
       case 'order': return 'text-green-600';
       case 'quote': return 'text-purple-600';
+      case 'requirement': return 'text-orange-600';
       default: return 'text-gray-600';
     }
   };
@@ -90,11 +74,13 @@ const SearchBar = () => {
   const formatResultText = (result) => {
     switch (result.type) {
       case 'vendor':
-        return `Vendor • ${result.contact_email || 'No email'}`;
+        return `Vendor • ${result.email || 'No email'}`;
       case 'order':
-        return `Order • ${result.material_list || 'No materials'} • ${result.status || 'Unknown status'}`;
+        return `Order • ${result.order_number || 'N/A'} • ${result.status || 'Unknown status'}`;
       case 'quote':
         return `Quote • $${result.price ? result.price.toLocaleString() : '0.00'} • ${result.status || 'Pending'}`;
+      case 'requirement':
+        return `Requirement • ${result.item_name} • Qty: ${result.quantity}`;
       default:
         return 'Item';
     }
@@ -107,7 +93,7 @@ const SearchBar = () => {
           type="text"
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
-          placeholder="Search vendors, orders, quotes..."
+          placeholder="Search vendors, orders, quotes, requirements..."
           className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -123,7 +109,8 @@ const SearchBar = () => {
       {showResults && results.length > 0 && (
         <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-96 overflow-y-auto z-50">
           {results.map((result) => (
-            <div
+            <Link
+              to={`/${result.type}s/${result.id}`}
               key={`${result.type}-${result.id}`}
               className="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors duration-150"
             >
@@ -134,7 +121,7 @@ const SearchBar = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-start">
                     <h4 className="font-medium text-gray-900 truncate">
-                      {result.name}
+                      {result.name || result.item_name || result.order_number || `ID: ${result.id}`}
                     </h4>
                     <span className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full capitalize flex-shrink-0 ml-2">
                       {result.type}
@@ -143,14 +130,9 @@ const SearchBar = () => {
                   <p className="text-sm text-gray-600 truncate">
                     {formatResultText(result)}
                   </p>
-                  {result.material_list && (
-                    <p className="text-xs text-gray-500 mt-1">
-                      Materials: {result.material_list}
-                    </p>
-                  )}
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

@@ -19,7 +19,7 @@ const Quotes = () => {
   const loadVendorQuotes = async () => {
     try {
       setLoading(true);
-      const response = await fetch('https://vendor-sync-backend-4bre.onrender.com/dashboard', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/dashboard`, {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }

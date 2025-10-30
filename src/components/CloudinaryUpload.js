@@ -32,29 +32,29 @@ const CloudinaryUpload = ({ onUploadSuccess, orderId, fileType = 'invoice' }) =>
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', 'vendorsync');
-      formData.append('folder', 'vendorsync');
+      formData.append('order_id', orderId);
+      formData.append('file_type', fileType);
 
-      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/demo/auto/upload', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/documents`, {
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
         body: formData,
       });
 
-      if (!cloudinaryResponse.ok) {
-        throw new Error('Cloudinary upload failed');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Backend upload failed');
       }
 
-      const cloudinaryData = await cloudinaryResponse.json();
+      const responseData = await response.json();
 
       setUploadProgress(100);
       setUploadSuccess(true);
 
       if (onUploadSuccess) {
-        onUploadSuccess({
-          file_url: cloudinaryData.secure_url,
-          public_id: cloudinaryData.public_id,
-          file_type: fileType
-        });
+        onUploadSuccess(responseData.document);
       }
 
       setTimeout(() => {
@@ -63,7 +63,7 @@ const CloudinaryUpload = ({ onUploadSuccess, orderId, fileType = 'invoice' }) =>
 
     } catch (error) {
       console.error('Upload error:', error);
-      setUploadError('Failed to upload file. Please try again.');
+      setUploadError(error.message || 'Failed to upload file. Please try again.');
     } finally {
       setIsUploading(false);
       setUploadProgress(0);

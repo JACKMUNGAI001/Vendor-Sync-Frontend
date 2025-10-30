@@ -19,7 +19,7 @@ const OrderList = () => {
       
       try {
         setLoading(true);
-        const response = await axios.get('https://vendor-sync-backend-4bre.onrender.com/orders', {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/orders`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -50,21 +50,6 @@ const OrderList = () => {
     fetchOrders();
   };
 
-  const fetchOrders = async () => {
-    if (!user?.token) return;
-    
-    try {
-      const response = await axios.get('https://vendor-sync-backend-4bre.onrender.com/orders', {
-        headers: { 
-          Authorization: `Bearer ${user.token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      setOrders(response.data.orders || []);
-    } catch (error) {
-      console.error('Orders fetch error:', error);
-    }
-  };
 
   const handleDeleteOrder = async (orderId) => {
     if (!window.confirm('Are you sure you want to delete this order?')) {
@@ -72,7 +57,7 @@ const OrderList = () => {
     }
 
     try {
-      await axios.delete(`https://vendor-sync-backend-4bre.onrender.com/orders/${orderId}`, {
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/orders/${orderId}`, {
         headers: { 
           Authorization: `Bearer ${user.token}`,
           'Content-Type': 'application/json'

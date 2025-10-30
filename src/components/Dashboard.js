@@ -17,7 +17,7 @@ const Dashboard = () => {
       
       try {
         setLoading(true);
-        const response = await axios.get('https://vendor-sync-backend-4bre.onrender.com/dashboard', {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/dashboard`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -181,6 +181,39 @@ const Dashboard = () => {
                   <FileText className="h-5 w-5 text-blue-600" />
                   <span>My Quotes</span>
                 </Link>
+              )}
+
+              {user?.role === 'manager' && (
+                <>
+                  <Link
+                    to="/requirements"
+                    className="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition"
+                  >
+                    <FileText className="h-5 w-5 text-blue-600" />
+                    <span>Requirements</span>
+                  </Link>
+                  <Link
+                    to="/vendor-categories"
+                    className="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition"
+                  >
+                    <Building2 className="h-5 w-5 text-blue-600" />
+                    <span>Vendor Categories</span>
+                  </Link>
+                  <Link
+                    to="/vendors"
+                    className="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition"
+                  >
+                    <Users className="h-5 w-5 text-blue-600" />
+                    <span>Vendors</span>
+                  </Link>
+                  <Link
+                    to="/users"
+                    className="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition"
+                  >
+                    <Users className="h-5 w-5 text-blue-600" />
+                    <span>Users</span>
+                  </Link>
+                </>
               )}
             </div>
           </div>

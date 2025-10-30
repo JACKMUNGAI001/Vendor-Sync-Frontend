@@ -11,6 +11,10 @@ import Orders from './pages/Orders';
 import NewOrder from './pages/NewOrder';
 import Quotes from './pages/Quotes';
 import Search from './pages/Search';
+import Requirements from './pages/Requirements';
+import VendorCategories from './pages/VendorCategories';
+import Vendors from './pages/Vendors';
+import Users from './pages/Users';
 
 function App() {
   return (
@@ -45,6 +49,42 @@ function App() {
             element={
               <ProtectedRoute requiredRole="manager">
                 <NewOrder />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/requirements" 
+            element={
+              <ProtectedRoute requiredRole="manager">
+                <Requirements />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/vendor-categories" 
+            element={
+              <ProtectedRoute requiredRole="manager">
+                <VendorCategories />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/vendors" 
+            element={
+              <ProtectedRoute requiredRole="manager">
+                <Vendors />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/users" 
+            element={
+              <ProtectedRoute requiredRole="manager">
+                <Users />
               </ProtectedRoute>
             } 
           />

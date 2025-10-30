@@ -15,7 +15,7 @@ const OrderForm = () => {
   useEffect(() => {
     const fetchVendors = async () => {
       try {
-        const response = await axios.get('https://vendor-sync-backend-4bre.onrender.com/vendors');
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/vendors`);
         setVendors(response.data.vendors || []);
       } catch (error) {
         console.error('Failed to fetch vendors:', error);
@@ -55,7 +55,7 @@ const OrderForm = () => {
       };
 
       const response = await axios.post(
-        'https://vendor-sync-backend-4bre.onrender.com/orders',
+        `${process.env.REACT_APP_BACKEND_URL}/orders`,
         orderData,
         {
           headers: {

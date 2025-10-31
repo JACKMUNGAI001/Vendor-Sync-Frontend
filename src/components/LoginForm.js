@@ -12,10 +12,12 @@ const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data) => {
+    console.log('onSubmit called with data:', data);
     setIsLoading(true);
     setSubmitError('');
     
     const result = await login(data.email, data.password);
+    console.log('Login function returned result:', result);
     
     if (result.success) {
       navigate('/dashboard');

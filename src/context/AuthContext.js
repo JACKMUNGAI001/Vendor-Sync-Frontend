@@ -9,15 +9,20 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const login = async (email, password) => {
+    console.log('AuthContext: login function called.');
     try {
+      console.log('AuthContext: Making API call to /api/login...');
       const response = await api.post("/api/login", { email, password });
+      console.log('AuthContext: API call successful. Response:', response.data);
       const { token, user: userData } = response.data;
       const userWithToken = { ...userData, token };
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(userWithToken));
       setUser(userWithToken);
+      console.log('AuthContext: User set, returning success.');
       return { success: true };
     } catch (error) {
+      console.error('AuthContext: API call failed. Error:', error);
       const errorMessage = error.response?.data?.message || "Invalid credentials or server error";
       return { success: false, error: errorMessage };
     }

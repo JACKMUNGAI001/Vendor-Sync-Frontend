@@ -17,7 +17,7 @@ const Dashboard = () => {
       
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/dashboard`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/dashboard`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'

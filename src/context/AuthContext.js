@@ -15,9 +15,10 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
-      navigate("/dashboard");
+      return { success: true };
     } catch (error) {
-      alert("Invalid credentials or server error");
+      const errorMessage = error.response?.data?.message || "Invalid credentials or server error";
+      return { success: false, error: errorMessage };
     }
   };
 

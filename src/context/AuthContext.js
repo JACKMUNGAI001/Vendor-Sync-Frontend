@@ -11,10 +11,11 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await api.post("/api/login", { email, password });
-      const { token, user } = response.data;
+      const { token, user: userData } = response.data;
+      const userWithToken = { ...userData, token };
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user);
+      localStorage.setItem("user", JSON.stringify(userWithToken));
+      setUser(userWithToken);
       return { success: true };
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Invalid credentials or server error";

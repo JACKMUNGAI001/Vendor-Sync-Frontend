@@ -7,14 +7,13 @@ import axios from 'axios';
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [dashboardData, setDashboardData] = useState([]);
+  const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       if (!user?.token) return;
-      
       try {
         setLoading(true);
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard`, {
@@ -32,7 +31,6 @@ const Dashboard = () => {
         setLoading(false);
       }
     };
-    
     fetchDashboardData();
   }, [user]);
 
@@ -71,6 +69,11 @@ const Dashboard = () => {
     );
   }
 
+  const itemsToDisplay =
+    user?.role === 'vendor'
+      ? dashboardData?.pending_quotes
+      : dashboardData?.recent_orders;
+
   return (
     <div className="min-h-screen bg-gray-100">
       <nav className="bg-white shadow-sm border-b">
@@ -84,7 +87,6 @@ const Dashboard = () => {
                 <span className="capitalize">{user?.role}</span>
               </div>
             </div>
-            
             <div className="flex items-center space-x-4">
               <span className="text-gray-700">Welcome, {user?.first_name}!</span>
               <button
@@ -122,7 +124,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Active Items</p>
-                <p className="text-2xl font-bold text-gray-900">{dashboardData.length}</p>
+                <p className="text-2xl font-bold text-gray-900">{itemsToDisplay?.length || 0}</p>
               </div>
               <div className="p-3 rounded-lg bg-green-100">
                 <FileText className="h-6 w-6 text-green-600" />
@@ -154,7 +156,6 @@ const Dashboard = () => {
                 <FileText className="h-5 w-5 text-blue-600" />
                 <span>View Orders</span>
               </Link>
-              
               <Link
                 to="/search"
                 className="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition"
@@ -162,7 +163,6 @@ const Dashboard = () => {
                 <Search className="h-5 w-5 text-blue-600" />
                 <span>Search</span>
               </Link>
-
               {user?.role === 'manager' && (
                 <Link
                   to="/orders/new"
@@ -172,7 +172,6 @@ const Dashboard = () => {
                   <span>Create Order</span>
                 </Link>
               )}
-
               {user?.role === 'vendor' && (
                 <Link
                   to="/quotes"
@@ -182,7 +181,6 @@ const Dashboard = () => {
                   <span>My Quotes</span>
                 </Link>
               )}
-
               {user?.role === 'manager' && (
                 <>
                   <Link
@@ -225,7 +223,7 @@ const Dashboard = () => {
                 {user?.role === 'staff' && 'Assigned Orders'}
                 {user?.role === 'vendor' && 'My Orders & Quotes'}
               </h3>
-              <span className="text-sm text-gray-500">{dashboardData.length} items</span>
+              <span className="text-sm text-gray-500">{itemsToDisplay?.length || 0} items</span>
             </div>
 
             {error && (
@@ -234,7 +232,7 @@ const Dashboard = () => {
               </div>
             )}
 
-            {dashboardData.length === 0 ? (
+            {!itemsToDisplay || itemsToDisplay.length === 0 ? (
               <div className="text-center py-12">
                 <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <p className="text-gray-500">No items found.</p>
@@ -249,12 +247,12 @@ const Dashboard = () => {
               </div>
             ) : (
               <div className="space-y-4">
-                {dashboardData.map((item) => (
+                {itemsToDisplay.map((item) => (
                   <div key={item.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition">
                     <div className="flex justify-between items-start">
                       <div>
-                        <p className="font-medium text-gray-900">{item.description}</p>
-                        <p className="text-sm text-gray-500 capitalize">{item.type} • {item.status}</p>
+                        <p className="font-medium text-gray-900">{item.order_number || item.description}</p>
+                        <p className="text-sm text-gray-500 capitalize">{item.status || 'N/A'}</p>
                         {item.created_at && (
                           <p className="text-xs text-gray-400">
                             Created: {new Date(item.created_at).toLocaleDateString()}
@@ -267,7 +265,7 @@ const Dashboard = () => {
                         item.status === 'cancelled' ? 'bg-red-100 text-red-800' :
                         'bg-blue-100 text-blue-800'
                       }`}>
-                        {item.status}
+                        {item.status || 'active'}
                       </span>
                     </div>
                   </div>

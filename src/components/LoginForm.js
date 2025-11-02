@@ -1,26 +1,30 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate, Link } from 'react-router-dom';
-import { Building2 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, Link } from "react-router-dom";
+import { Building2 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const LoginForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState('');
+  const [submitError, setSubmitError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const redirectByRole = (role) => {
+    if (role === "manager") navigate("/manager-dashboard");
+    else if (role === "staff") navigate("/staff-dashboard");
+    else if (role === "vendor") navigate("/vendor-dashboard");
+    else navigate("/dashboard");
+  };
+
   const onSubmit = async (data) => {
-    console.log('onSubmit called with data:', data);
     setIsLoading(true);
-    setSubmitError('');
-    
+    setSubmitError("");
     const result = await login(data.email, data.password);
-    console.log('Login function returned result:', result);
-    
     if (result.success) {
-      navigate('/dashboard');
+      const user = JSON.parse(localStorage.getItem("user"));
+      redirectByRole(user.role);
     } else {
       setSubmitError(result.error);
     }
@@ -29,12 +33,11 @@ const LoginForm = () => {
 
   const demoLogin = async (email, password) => {
     setIsLoading(true);
-    setSubmitError('');
-    
+    setSubmitError("");
     const result = await login(email, password);
-    
     if (result.success) {
-      navigate('/dashboard');
+      const user = JSON.parse(localStorage.getItem("user"));
+      redirectByRole(user.role);
     } else {
       setSubmitError(result.error);
     }
@@ -55,12 +58,9 @@ const LoginForm = () => {
           <input
             id="email"
             type="email"
-            {...register('email', { 
-              required: 'Email is required',
-              pattern: {
-                value: /^\S+@\S+$/i,
-                message: 'Invalid email address'
-              }
+            {...register("email", {
+              required: "Email is required",
+              pattern: { value: /^\S+@\S+$/i, message: "Invalid email address" },
             })}
             className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="your.email@company.com"
@@ -73,12 +73,9 @@ const LoginForm = () => {
           <input
             id="password"
             type="password"
-            {...register('password', { 
-              required: 'Password is required',
-              minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters'
-              }
+            {...register("password", {
+              required: "Password is required",
+              minLength: { value: 6, message: "Password must be at least 6 characters" },
             })}
             className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="••••••••"
@@ -97,7 +94,7 @@ const LoginForm = () => {
           disabled={isLoading}
           className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition disabled:bg-blue-300 disabled:cursor-not-allowed"
         >
-          {isLoading ? 'Logging in...' : 'Log In'}
+          {isLoading ? "Logging in..." : "Log In"}
         </button>
       </form>
 
@@ -105,21 +102,21 @@ const LoginForm = () => {
         <h3 className="text-sm font-medium text-gray-700 mb-3">Demo Accounts:</h3>
         <div className="space-y-2">
           <button
-            onClick={() => demoLogin('manager@vendorsync.com', 'password123')}
+            onClick={() => demoLogin("manager@vendorsync.com", "password123")}
             disabled={isLoading}
             className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition disabled:bg-green-300 text-sm"
           >
             Login as Manager
           </button>
           <button
-            onClick={() => demoLogin('staff@vendorsync.com', 'password123')}
+            onClick={() => demoLogin("staff@vendorsync.com", "password123")}
             disabled={isLoading}
             className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition disabled:bg-blue-300 text-sm"
           >
             Login as Staff
           </button>
           <button
-            onClick={() => demoLogin('vendor@vendorsync.com', 'password123')}
+            onClick={() => demoLogin("vendor@vendorsync.com", "password123")}
             disabled={isLoading}
             className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition disabled:bg-purple-300 text-sm"
           >
@@ -129,7 +126,10 @@ const LoginForm = () => {
       </div>
 
       <div className="text-center mt-6 text-sm text-gray-600">
-        Don't have an account? <Link to="/register" className="text-blue-600 hover:underline">Register here</Link>
+        Don't have an account?{" "}
+        <Link to="/register" className="text-blue-600 hover:underline">
+          Register here
+        </Link>
       </div>
     </div>
   );

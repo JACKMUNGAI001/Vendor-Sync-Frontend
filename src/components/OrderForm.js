@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { Building2 } from 'lucide-react';
 
 const OrderForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -11,18 +12,36 @@ const OrderForm = () => {
   const [vendors, setVendors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [vendorsLoading, setVendorsLoading] = useState(true);
 
   useEffect(() => {
     const fetchVendors = async () => {
+      if (!user?.token) return;
+      
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/vendors`);
-        setVendors(response.data.vendors || []);
+        setVendorsLoading(true);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/vendors`, {
+          headers: { 
+            Authorization: `Bearer ${user.token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        const verifiedVendors = (response.data.vendors || []).filter(v => v.is_verified);
+        setVendors(verifiedVendors);
+        
+        if (verifiedVendors.length === 0) {
+          setSubmitError('No verified vendors available. Please verify vendors first.');
+        }
       } catch (error) {
         console.error('Failed to fetch vendors:', error);
+        setSubmitError('Failed to load vendors. Please try again.');
+      } finally {
+        setVendorsLoading(false);
       }
     };
     fetchVendors();
-  }, []);
+  }, [user]);
 
   const onSubmit = async (data) => {
     if (!user) {
@@ -39,19 +58,9 @@ const OrderForm = () => {
     setSubmitError('');
 
     try {
-      const materialList = {
-        [data.materialName]: {
-          quantity: parseInt(data.quantity),
-          unit: data.unit,
-          specifications: data.specifications || ''
-        }
-      };
-
       const orderData = {
-        vendor_id: parseInt(data.vendorId),
-        material_list: materialList,
-        delivery_date: data.deliveryDate,
-        special_instructions: data.specialInstructions || ''
+        order_number: data.orderNumber,
+        vendor_id: parseInt(data.vendorId)
       };
 
       const response = await axios.post(
@@ -81,98 +90,63 @@ const OrderForm = () => {
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow p-6">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Create New Order</h2>
+          <div className="flex items-center gap-2 mb-2">
+            <Building2 className="h-6 w-6 text-blue-600" />
+            <h2 className="text-2xl font-bold text-gray-900">Create New Order</h2>
+          </div>
           <p className="text-gray-600">Fill in the details to create a new purchase order</p>
         </div>
         
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Vendor *</label>
-            <select
-              {...register('vendorId', { required: 'Vendor is required' })}
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Select a vendor</option>
-              {vendors.map((vendor) => (
-                <option key={vendor.id} value={vendor.id}>
-                  {vendor.name} - {vendor.contact_email}
-                </option>
-              ))}
-            </select>
-            {errors.vendorId && <p className="text-red-500 text-sm mt-1">{errors.vendorId.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Material Name *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Order Number *
+            </label>
             <input
               type="text"
-              {...register('materialName', { required: 'Material name is required' })}
+              {...register('orderNumber', { required: 'Order number is required' })}
               className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="e.g., Cement, Steel Bars, Electrical Wires"
+              placeholder="e.g., PO-2025-001"
             />
-            {errors.materialName && <p className="text-red-500 text-sm mt-1">{errors.materialName.message}</p>}
+            {errors.orderNumber && (
+              <p className="text-red-500 text-sm mt-1">{errors.orderNumber.message}</p>
+            )}
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Quantity *</label>
-              <input
-                type="number"
-                {...register('quantity', { 
-                  required: 'Quantity is required',
-                  min: { value: 1, message: 'Quantity must be at least 1' }
-                })}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="100"
-              />
-              {errors.quantity && <p className="text-red-500 text-sm mt-1">{errors.quantity.message}</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Unit *</label>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Assign to Vendor *
+            </label>
+            {vendorsLoading ? (
+              <div className="flex items-center justify-center p-3 border border-gray-300 rounded-md">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500 mr-2"></div>
+                <span className="text-gray-600">Loading vendors...</span>
+              </div>
+            ) : vendors.length === 0 ? (
+              <div className="p-3 border border-yellow-300 bg-yellow-50 rounded-md">
+                <p className="text-yellow-800 text-sm">
+                  No verified vendors available. Please verify vendors in the Vendors page first.
+                </p>
+              </div>
+            ) : (
               <select
-                {...register('unit', { required: 'Unit is required' })}
+                {...register('vendorId', { required: 'Vendor is required' })}
                 className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">Select unit</option>
-                <option value="kg">Kilograms</option>
-                <option value="tons">Tons</option>
-                <option value="pieces">Pieces</option>
-                <option value="bags">Bags</option>
-                <option value="liters">Liters</option>
-                <option value="meters">Meters</option>
+                <option value="">Select a vendor</option>
+                {vendors.map((vendor) => (
+                  <option key={vendor.id} value={vendor.id}>
+                    {vendor.name} - {vendor.company_name || vendor.email}
+                  </option>
+                ))}
               </select>
-              {errors.unit && <p className="text-red-500 text-sm mt-1">{errors.unit.message}</p>}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Specifications</label>
-            <textarea
-              {...register('specifications')}
-              rows="3"
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Any specific requirements, quality standards, or specifications..."
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Delivery Date</label>
-            <input
-              type="date"
-              {...register('deliveryDate')}
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Special Instructions</label>
-            <textarea
-              {...register('specialInstructions')}
-              rows="3"
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Any special delivery instructions, site access information, or contact details..."
-            />
+            )}
+            {errors.vendorId && (
+              <p className="text-red-500 text-sm mt-1">{errors.vendorId.message}</p>
+            )}
+            <p className="text-xs text-gray-500 mt-1">
+              Only verified vendors are shown. Total available: {vendors.length}
+            </p>
           </div>
 
           {submitError && (
@@ -184,7 +158,7 @@ const OrderForm = () => {
           <div className="flex gap-4 pt-4">
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || vendors.length === 0}
               className="flex-1 bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition disabled:bg-blue-300 disabled:cursor-not-allowed"
             >
               {loading ? 'Creating Order...' : 'Create Order'}
@@ -197,6 +171,18 @@ const OrderForm = () => {
               Cancel
             </button>
           </div>
+
+          {vendors.length === 0 && !vendorsLoading && (
+            <div className="text-center mt-4">
+              <button
+                type="button"
+                onClick={() => navigate('/vendors')}
+                className="text-blue-600 hover:underline text-sm"
+              >
+                → Go to Vendors page to add and verify vendors
+              </button>
+            </div>
+          )}
         </form>
       </div>
     </div>

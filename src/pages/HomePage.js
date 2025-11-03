@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Building2, Users, Package } from 'lucide-react';
-import Button from '../components/ui/Button'; // Changed from { Button }
+import Button from '../components/ui/Button';
 
 const HomePage = () => {
   return (
@@ -34,7 +34,7 @@ const HomePage = () => {
           </p>
           <div className="flex gap-4 justify-center">
             <Link to="/register">
-              <Button size="lg">Start Free Trial</Button>
+              <Button size="lg">Register Now</Button>
             </Link>
             <Link to="/login">
               <Button variant="outline" size="lg">Demo Login</Button>

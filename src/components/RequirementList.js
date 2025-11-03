@@ -18,7 +18,7 @@ const RequirementList = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/requirements`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/requirements`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -46,7 +46,7 @@ const RequirementList = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/requirements`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/requirements`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ const RequirementList = () => {
     if (!window.confirm('Are you sure you want to delete this requirement?')) return;
 
     try {
-      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/requirements/${id}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/requirements/${id}`, {
         headers: { 
           Authorization: `Bearer ${user.token}`,
           'Content-Type': 'application/json'

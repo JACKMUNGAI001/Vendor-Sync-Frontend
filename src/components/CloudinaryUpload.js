@@ -35,7 +35,7 @@ const CloudinaryUpload = ({ onUploadSuccess, orderId, fileType = 'invoice' }) =>
       formData.append('order_id', orderId);
       formData.append('file_type', fileType);
 
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/documents`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/documents`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${user.token}`,

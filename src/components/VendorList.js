@@ -18,7 +18,7 @@ const VendorList = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/vendors`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/vendors`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -46,7 +46,7 @@ const VendorList = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/vendors`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/vendors`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ const VendorList = () => {
     if (!window.confirm('Are you sure you want to delete this vendor?')) return;
 
     try {
-      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/vendors/${id}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/vendors/${id}`, {
         headers: { 
           Authorization: `Bearer ${user.token}`,
           'Content-Type': 'application/json'

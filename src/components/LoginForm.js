@@ -11,36 +11,33 @@ const LoginForm = () => {
   const [submitError, setSubmitError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const redirectByRole = (role) => {
-    if (role === "manager") navigate("/manager-dashboard");
-    else if (role === "staff") navigate("/staff-dashboard");
-    else if (role === "vendor") navigate("/vendor-dashboard");
-    else navigate("/dashboard");
-  };
-
   const onSubmit = async (data) => {
     setIsLoading(true);
     setSubmitError("");
+    
     const result = await login(data.email, data.password);
+    
     if (result.success) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      redirectByRole(user.role);
+      navigate("/dashboard");
     } else {
       setSubmitError(result.error);
     }
+    
     setIsLoading(false);
   };
 
   const demoLogin = async (email, password) => {
     setIsLoading(true);
     setSubmitError("");
+    
     const result = await login(email, password);
+    
     if (result.success) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      redirectByRole(user.role);
+      navigate("/dashboard");
     } else {
       setSubmitError(result.error);
     }
+    
     setIsLoading(false);
   };
 
@@ -102,21 +99,21 @@ const LoginForm = () => {
         <h3 className="text-sm font-medium text-gray-700 mb-3">Demo Accounts:</h3>
         <div className="space-y-2">
           <button
-            onClick={() => demoLogin("manager@vendorsync.com", "password123")}
+            onClick={() => demoLogin("manager@example.com", "password123")}
             disabled={isLoading}
             className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition disabled:bg-green-300 text-sm"
           >
             Login as Manager
           </button>
           <button
-            onClick={() => demoLogin("staff@vendorsync.com", "password123")}
+            onClick={() => demoLogin("staff@example.com", "password123")}
             disabled={isLoading}
             className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition disabled:bg-blue-300 text-sm"
           >
             Login as Staff
           </button>
           <button
-            onClick={() => demoLogin("vendor@vendorsync.com", "password123")}
+            onClick={() => demoLogin("vendor@example.com", "password123")}
             disabled={isLoading}
             className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition disabled:bg-purple-300 text-sm"
           >

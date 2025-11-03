@@ -15,7 +15,7 @@ const UserForm = ({ user: existingUser, onSuccess, onCancel }) => {
       if (!user?.token) return;
       try {
         // Assuming you have a /roles endpoint to fetch roles
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/roles`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/roles`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -47,14 +47,14 @@ const UserForm = ({ user: existingUser, onSuccess, onCancel }) => {
 
     try {
       if (existingUser) {
-        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/users/${existingUser.id}`, data, {
+        await axios.patch(`${process.env.REACT_APP_API_URL}/api/users/${existingUser.id}`, data, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
           }
         });
       } else {
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/users`, data, {
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/users`, data, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'

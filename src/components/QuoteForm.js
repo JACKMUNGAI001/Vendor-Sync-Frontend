@@ -33,7 +33,7 @@ const QuoteForm = ({ orderId, onSubmitSuccess, onCancel }) => {
         notes: data.notes || ''
       };
 
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/quotes`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/quotes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

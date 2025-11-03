@@ -18,7 +18,7 @@ const VendorCategoryList = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/vendor-categories`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/vendor-categories`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -46,7 +46,7 @@ const VendorCategoryList = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/vendor-categories`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/vendor-categories`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ const VendorCategoryList = () => {
     if (!window.confirm('Are you sure you want to delete this category?')) return;
 
     try {
-      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/vendor-categories/${id}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/vendor-categories/${id}`, {
         headers: { 
           Authorization: `Bearer ${user.token}`,
           'Content-Type': 'application/json'

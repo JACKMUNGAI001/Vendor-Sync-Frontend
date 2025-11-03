@@ -25,14 +25,14 @@ const RequirementForm = ({ requirement, onSuccess, onCancel }) => {
 
     try {
       if (requirement) {
-        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/requirements/${requirement.id}`, data, {
+        await axios.patch(`${process.env.REACT_APP_API_URL}/api/requirements/${requirement.id}`, data, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
           }
         });
       } else {
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/requirements`, data, {
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/requirements`, data, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'

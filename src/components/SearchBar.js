@@ -34,7 +34,7 @@ const SearchBar = () => {
 
     setIsLoading(true);
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/search`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/search`, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },

@@ -18,7 +18,7 @@ const UserList = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/users`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -46,7 +46,7 @@ const UserList = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/users`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ const UserList = () => {
     if (!window.confirm('Are you sure you want to delete this user?')) return;
 
     try {
-      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/users/${id}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/users/${id}`, {
         headers: { 
           Authorization: `Bearer ${user.token}`,
           'Content-Type': 'application/json'

@@ -14,7 +14,7 @@ const VendorForm = ({ vendor, onSuccess, onCancel }) => {
     const fetchCategories = async () => {
       if (!user?.token) return;
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/vendor-categories`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/vendor-categories`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -49,14 +49,14 @@ const VendorForm = ({ vendor, onSuccess, onCancel }) => {
 
     try {
       if (vendor) {
-        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/vendors/${vendor.id}`, data, {
+        await axios.patch(`${process.env.REACT_APP_API_URL}/api/vendors/${vendor.id}`, data, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
           }
         });
       } else {
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/vendors`, data, {
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/vendors`, data, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'

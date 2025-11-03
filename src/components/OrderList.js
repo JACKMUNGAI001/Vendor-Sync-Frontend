@@ -19,7 +19,7 @@ const OrderList = () => {
       
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/orders`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/orders`, {
           headers: { 
             Authorization: `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ const OrderList = () => {
     }
 
     try {
-      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/orders/${orderId}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/orders/${orderId}`, {
         headers: { 
           Authorization: `Bearer ${user.token}`,
           'Content-Type': 'application/json'

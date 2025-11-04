@@ -4,10 +4,14 @@ A modern React application for managing vendors, users, requirements, quotes, an
 
 ## Live Demo
 
- **[View Live Application](https://chic-kashata-589433.netlify.app/)**
+ **[View Live Application](https://chic-kashata-589433.netlify.app/)** 
+
+ ## Backend Deployment
+ **[Backend API](https://vendor-sync-backend-touj.onrender.com)**
 
  ## Backend Repository
  **[Backend Repository](https://github.com/JACKMUNGAI001/Vendor-Sync-Backend/blob/main/README.md)**
+ 
 
 ## Features
 

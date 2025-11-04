@@ -15,6 +15,7 @@ import Requirements from './pages/Requirements';
 import VendorCategories from './pages/VendorCategories';
 import Vendors from './pages/Vendors';
 import Users from './pages/Users';
+import VendorRequirements from './pages/VendorRequirements'; // Add this import
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
             } 
           />
 
+          {/* Manager Routes */}
           <Route 
             path="/requirements" 
             element={
@@ -88,7 +90,8 @@ function App() {
               </ProtectedRoute>
             } 
           />
-          
+
+          {/* Vendor Routes */}
           <Route 
             path="/quotes" 
             element={
@@ -97,7 +100,17 @@ function App() {
               </ProtectedRoute>
             } 
           />
+
+          <Route 
+            path="/vendor/requirements" 
+            element={
+              <ProtectedRoute requiredRole="vendor">
+                <VendorRequirements />
+              </ProtectedRoute>
+            } 
+          />
           
+          {/* General Protected Route */}
           <Route 
             path="/search" 
             element={

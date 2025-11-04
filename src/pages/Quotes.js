@@ -9,6 +9,7 @@ const Quotes = () => {
   const [showQuoteForm, setShowQuoteForm] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (user?.role === 'vendor') {
@@ -19,19 +20,35 @@ const Quotes = () => {
   const loadVendorQuotes = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/dashboard`, {
+      setError('');
+      
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/quotes`, {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
       });
       
-      if (response.ok) {
-        const data = await response.json();
-        const quoteData = data.filter(item => item.type === 'quote');
-        setQuotes(quoteData);
+      if (!response.ok) {
+        throw new Error('Failed to fetch quotes');
       }
+      
+      const data = await response.json();
+      
+      // FIX: Handle different response formats
+      let quotesArray = [];
+      if (Array.isArray(data)) {
+        quotesArray = data;
+      } else if (data.quotes && Array.isArray(data.quotes)) {
+        quotesArray = data.quotes;
+      } else if (data.data && Array.isArray(data.data)) {
+        quotesArray = data.data;
+      }
+      
+      setQuotes(quotesArray);
     } catch (error) {
       console.error('Failed to load quotes:', error);
+      setError('Failed to load quotes. Please try again.');
+      setQuotes([]); // Ensure quotes is always an array
     } finally {
       setLoading(false);
     }
@@ -99,6 +116,12 @@ const Quotes = () => {
           </div>
 
           <div className="p-6">
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+                {error}
+              </div>
+            )}
+
             {loading ? (
               <div className="flex justify-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
@@ -124,13 +147,13 @@ const Quotes = () => {
                   <div key={quote.id} className="border border-gray-200 rounded-lg p-6 hover:border-blue-300 transition">
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900">{quote.description}</h3>
+                        <h3 className="text-lg font-semibold text-gray-900">{quote.description || quote.product_name || 'Quote'}</h3>
                         <p className="text-gray-600">Quote #{quote.id}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         {getStatusIcon(quote.status)}
                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(quote.status)}`}>
-                          {quote.status}
+                          {quote.status || 'pending'}
                         </span>
                       </div>
                     </div>
@@ -139,7 +162,7 @@ const Quotes = () => {
                       <div>
                         <p className="text-sm text-gray-600">Price</p>
                         <p className="text-lg font-semibold text-gray-900">
-                          ${quote.price ? quote.price.toLocaleString() : '0.00'}
+                          ${quote.price ? parseFloat(quote.price).toLocaleString() : '0.00'}
                         </p>
                       </div>
                       <div>
@@ -149,8 +172,8 @@ const Quotes = () => {
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Order</p>
-                        <p className="text-gray-900">#{quote.id}</p>
+                        <p className="text-sm text-gray-600">Delivery Time</p>
+                        <p className="text-gray-900">{quote.delivery_time || 'N/A'}</p>
                       </div>
                     </div>
 

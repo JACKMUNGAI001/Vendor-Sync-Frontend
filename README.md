@@ -1,430 +1,296 @@
+# Vendor-Sync Frontend
 
+A modern React application for managing vendors, users, requirements, quotes, and orders with full CRUD operations and role-based access control. Developed by Maureen, Wayne, and Jackson as a capstone project.
 
-# Vendor-Sync Backend
+## Live Demo
 
-A Flask RESTful API for vendor management system with full authentication, role-based access control, and comprehensive CRUD operations. Developed by Maureen, Wayne, and Jackson as a capstone project.
+ **[View Live Application](https://chic-kashata-589433.netlify.app/)**
 
 ## Features
 
-- JWT Authentication system with secure token management
-- Role-Based Access Control (Admin, Manager, Vendor, Staff)
-- RESTful API design with Flask-RESTful
-- Comprehensive CRUD operations with pagination
-- Image upload and management with Cloudinary
-- Email integration with SendGrid for notifications
-- Search functionality with Algolia indexing
-- Data validation with Marshmallow schemas
-- API documentation with Swagger UI/OpenAPI
-- Database migrations with Alembic
+- JWT Authentication with login/register flow
+- Role-Based Access Control (Admin, Manager, Vendor, Staff roles)
+- Protected routes and context-based auth state management
+- Complete CRUD operations for all entities (Users, Vendors, Orders, Quotes, Requirements)
+- Cloudinary image upload and document management
+- Form validation with React Hook Form
+- Pagination for all list views
+- Algolia-powered search across vendors, orders, and quotes
+- Date formatting with Day.js throughout the application
+- Responsive design with Tailwind CSS aligned with Figma designs
 
 ## Tech Stack
 
-- Python 3.10+
-- Flask and Flask-RESTful
-- SQLAlchemy ORM
-- PostgreSQL database
-- Alembic for database migrations
-- Marshmallow for serialization/validation
-- JWT for authentication
-- Cloudinary for image storage
-- SendGrid for email services
-- Algolia for search indexing
-- Swagger UI for API documentation
-- Gunicorn for production server
+- React 18 + Vite
+- React Router v6 for routing
+- React Hook Form for form handling and validation
+- Context API for auth state management
+- Axios for API calls
+- Tailwind CSS for styling
+- Day.js for date formatting
+- Cloudinary for image handling
+- Algolia for search functionality
 
 ## Project Structure
 
 ```
-backend/
-├── app/
-│   ├── __init__.py
-│   ├── models/
-│   │   ├── user.py
-│   │   ├── role.py
-│   │   ├── vendor.py
-│   │   ├── vendor_category.py
-│   │   ├── requirement.py
-│   │   ├── quote.py
-│   │   ├── order.py
-│   │   └── document.py
-│   ├── resources/
-│   │   ├── auth.py
-│   │   ├── users.py
-│   │   ├── vendors.py
-│   │   ├── vendor_categories.py
-│   │   ├── requirements.py
-│   │   ├── quotes.py
-│   │   ├── orders.py
-│   │   └── documents.py
-│   ├── schemas/
-│   │   ├── user_schema.py
-│   │   ├── vendor_schema.py
-│   │   ├── requirement_schema.py
-│   │   ├── quote_schema.py
-│   │   └── order_schema.py
-│   ├── services/
-│   │   ├── auth_service.py
-│   │   ├── email_service.py
-│   │   ├── cloudinary_service.py
-│   │   ├── algolia_service.py
-│   │   └── swagger_service.py
-│   └── utils/
-│       ├── decorators.py
-│       ├── validators.py
-│       └── date_utils.py
-├── migrations/
-├── tests/
-├── config.py
-├── requirements.txt
-├── wsgi.py
-├── db_seed.py
-└── README.md
+Vendor-Sync-Frontend/
+├─ public/
+│  └─ index.html
+├─ src/
+│  ├─ api/
+│  │  ├─ axios.js
+│  │  └─ axiosInstance.js
+│  ├─ components/
+│  │  ├─ ui/
+│  │  │  └─ Button.js
+│  │  ├─ CloudinaryUpload.js
+│  │  ├─ Dashboard.js
+│  │  ├─ LoginForm.js
+│  │  ├─ OrderForm.js
+│  │  ├─ OrderList.js
+│  │  ├─ ProtectedRoute.js
+│  │  ├─ QuoteForm.js
+│  │  ├─ RegisterForm.js
+│  │  ├─ RequirementForm.js
+│  │  ├─ RequirementList.js
+│  │  ├─ SearchBar.js
+│  │  ├─ UserForm.js
+│  │  ├─ UserList.js
+│  │  ├─ VendorCategoryForm.js
+│  │  ├─ VendorCategoryList.js
+│  │  ├─ VendorForm.js
+│  │  └─ VendorList.js
+│  ├─ context/
+│  │  └─ AuthContext.js
+│  ├─ hooks/
+│  │  └─ useAuth.js
+│  ├─ pages/
+│  │  ├─ Dashboard.js
+│  │  ├─ HomePage.js
+│  │  ├─ Login.js
+│  │  ├─ NewOrder.js
+│  │  ├─ Orders.js
+│  │  ├─ Quotes.js
+│  │  ├─ Register.js
+│  │  ├─ Requirements.js
+│  │  ├─ Search.js
+│  │  ├─ Users.js
+│  │  ├─ VendorCategories.js
+│  │  └─ Vendors.js
+│  ├─ utils/
+│  │  ├─ dateFormatter.js
+│  │  └─ validators.js
+│  ├─ App.js
+│  ├─ index.css
+│  └─ index.js
+├─ .env.example
+├─ netlify.toml
+├─ package.json
+├─ postcss.config.js
+├─ tailwind.config.js
+├─ vite.config.js
+└─ README.md
 ```
 
 ## Team Contributions
 
 ### Jackson
-- Authentication System: JWT implementation, login endpoints
-- User Management: User CRUD operations, role assignment
-- Role-Based Access Control: Permission system and decorators
-- Dashboard API: Role-based data aggregation
-- Database Models: User and Role models with relationships
+- Authentication System: JWT implementation, login/logout functionality
+- User Management: User CRUD operations, role-based access
+- Dashboard: Role-based dashboard components and data fetching
+- Routing: React Router v6 setup and protected routes
+- Auth Context: Global authentication state management
 
 ### Wayne
 - Order Management: Full CRUD operations for purchase orders
-- Order Assignments: Staff assignment system
-- Status Workflow: Order status state management
-- Pagination: API pagination implementation
-- Database Models: PurchaseOrder and OrderAssignment models
+- Order Assignments: Staff assignment functionality
+- Status Updates: Order status workflow management
+- Pagination: List pagination implementation
+- Form Validation: Order forms with React Hook Form
 
 ### Maureen
-- Vendor Management: Vendor registration and profile management
-- Quote System: Quote submission, review, and acceptance
-- Search Integration: Algolia setup and search endpoints
-- Document Management: Cloudinary file upload system
-- Email Notifications: SendGrid integration for business workflows
-- Swagger UI: Comprehensive API documentation
-- Date Utilities: Consistent date handling across API
+- Vendor Management: Vendor registration and management
+- Quote System: Quote submission and acceptance workflow
+- Search Functionality: Algolia integration for real-time search
+- Document Upload: Cloudinary integration for file management
+- Email Notifications: SendGrid integration for quote and order notifications
+- Date Formatting: Day.js implementation throughout application
+- Swagger UI: API documentation setup
 
 ## Prerequisites
 
-- Python 3.10+
-- PostgreSQL database
-- Cloudinary account
-- SendGrid account
-- Algolia account
+- Node.js (version specified in .nvmrc)
+- npm or yarn
 
 ## Installation
 
-1. Create and activate virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+1. Install dependencies
+   ```bash
+   npm install
+   ```
 
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+2. Configure environment variables
+   ```bash
+   cp .env.example .env
+   ```
+   Fill in the environment variables:
+   ```
+   VITE_API_BASE_URL=your_backend_api_url
+   VITE_CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+   VITE_CLOUDINARY_UPLOAD_PRESET=your_upload_preset
+   VITE_ALGOLIA_APP_ID=your_algolia_app_id
+   VITE_ALGOLIA_SEARCH_KEY=your_algolia_search_key
+   ```
 
-3. Set up environment variables:
-```bash
-cp .env.example .env
-```
+3. Start the development server
+   ```bash
+   npm run dev
+   ```
 
-4. Edit .env with your configuration:
-```
-FLASK_ENV=development
-SECRET_KEY=your_secret_key
-DATABASE_URL=postgresql://user:password@localhost:5432/vendor_sync
-JWT_SECRET_KEY=your_jwt_secret
+## Available Scripts
 
-# Cloudinary
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
 
-# SendGrid
-SENDGRID_API_KEY=your_sendgrid_key
-EMAIL_FROM=no-reply@vendorsync.com
+## Routing
 
-# Algolia
-ALGOLIA_APP_ID=your_algolia_app_id
-ALGOLIA_API_KEY=your_algolia_api_key
-ALGOLIA_INDEX_NAME=vendors
+The application uses React Router v6 with the following routes:
 
-# Swagger
-SWAGGER_URL=/api/docs
-API_URL=/api/swagger.json
-```
+### Public Routes
+- `/` - Homepage
+- `/login` - Login page
+- `/register` - Registration page
+- `/search` - Search page
 
-## Database Setup
+### Protected Routes
+- `/dashboard` - User dashboard (role-based content)
+- `/users` - User management (Admin only)
+- `/vendors` - Vendor management
+- `/vendor-categories` - Vendor category management
+- `/requirements` - Requirements management
+- `/quotes` - Quotes management
+- `/orders` - Orders management
+- `/new-order` - Create new orders (Manager only)
 
-1. Create PostgreSQL database:
-```bash
-createdb vendor_sync
-```
+## Authentication & Authorization
 
-2. Run migrations:
-```bash
-flask db upgrade
-```
+- JWT-based authentication with secure token storage
+- Role-Based Access Control (RBAC) with four roles: Admin, Manager, Vendor, Staff
+- Protected routes using ProtectedRoute component
+- Auth state management via React Context
+- Automatic token refresh and session management
 
-3. Seed initial data (roles, admin user):
-```bash
-python db_seed.py
-```
+## Form Handling
 
-## Running the Application
+All forms use React Hook Form for:
+- Form state management
+- Validation with custom rules using Yup schemas
+- Error handling and user-friendly error display
+- Form submission handling with loading states
+- Field-level validation and dirty state tracking
 
-### Development
-```bash
-flask run --host=0.0.0.0 --port=5000
-```
+## Date Formatting
 
-### Production
-```bash
-gunicorn wsgi:app --bind 0.0.0.0:8000 --workers=4
-```
+The application uses Day.js for consistent date formatting:
+- All dates displayed in human-readable format (MMM DD, YYYY)
+- Relative time formatting (e.g., "2 days ago")
+- Timezone handling and localization
+- Date validation in forms
 
-## API Documentation
+## API Integration
 
-Swagger UI documentation is available at `/api/docs` when running the application. This includes:
-
-- Interactive API explorer
-- Request/response schemas
-- Authentication requirements
-- Example requests for all endpoints
-
-## Authentication
-
-The API uses JWT authentication. Include the token in the Authorization header:
-
-```
-Authorization: Bearer <your_jwt_token>
-```
-
-Tokens are automatically refreshed, and endpoints are protected based on user roles.
-
-## Role-Based Access Control
-
-### Admin
-- Full access to all resources
-- User management and role assignment
-- System configuration
-
-### Manager
-- Create and manage purchase orders
-- Assign orders to staff
-- Review and accept vendor quotes
-- Vendor management
-
-### Vendor
-- View assigned purchase orders
-- Submit quotes for orders
-- Upload documents and invoices
-- Manage vendor profile
-
-### Staff
-- View assigned orders
-- Update order status
-- Upload inspection documents
-- Basic system access
-
-## Endpoints
-
-### Authentication
-- `POST /api/auth/login` - User login and token generation
-- `POST /api/auth/refresh` - Refresh JWT token
-- `POST /api/auth/logout` - User logout
-
-### Users
-- `GET /api/users` - List users (Admin only)
-- `GET /api/users/{id}` - Get user details
-- `POST /api/users` - Create user (Admin only)
-- `PUT /api/users/{id}` - Update user
-- `DELETE /api/users/{id}` - Delete user (Admin only)
-
-### Vendors
-- `GET /api/vendors` - List vendors with pagination
-- `POST /api/vendors` - Create vendor (Manager/Admin)
-- `GET /api/vendors/{id}` - Get vendor details
-- `PUT /api/vendors/{id}` - Update vendor
-- `DELETE /api/vendors/{id}` - Delete vendor (Admin only)
-
-### Orders
-- `GET /api/orders` - List orders with pagination and filtering
-- `POST /api/orders` - Create purchase order (Manager)
-- `GET /api/orders/{id}` - Get order details
-- `PUT /api/orders/{id}` - Update order
-- `PATCH /api/orders/{id}` - Update order status
-- `DELETE /api/orders/{id}` - Delete order (Manager/Admin)
-
-### Quotes
-- `GET /api/quotes` - List quotes with pagination
-- `POST /api/quotes` - Submit quote (Vendor)
-- `GET /api/quotes/{id}` - Get quote details
-- `PATCH /api/quotes/{id}` - Accept/reject quote (Manager)
-
-### Documents
-- `POST /api/documents` - Upload document/file
-- `GET /api/documents/{id}` - Get document details
-- `DELETE /api/documents/{id}` - Delete document
-
-### Search
-- `GET /api/search` - Search across vendors, orders, quotes
-
-## Pagination
-
-All list endpoints support pagination with query parameters:
-
-- `page` - Page number (default: 1)
-- `per_page` - Items per page (default: 10, max: 100)
-
-Response includes pagination metadata:
-
-```json
-{
-  "items": [...],
-  "total": 150,
-  "page": 1,
-  "per_page": 10,
-  "pages": 15
-}
-```
-
-## Data Validation
-
-Marshmallow schemas are used for:
-
-- Input validation on all endpoints
-- Data serialization for responses
-- Nested relationships and complex objects
-- Custom validation rules and error messages
-
-## Email Integration
-
-SendGrid is used for:
-
-- User registration confirmations
-- Quote submission notifications
-- Order status updates
-- System announcements
+Axios is configured with:
+- Base URL from environment variables
+- Request/response interceptors for automatic JWT token attachment
+- Error handling and user-friendly error messages
+- Response parsing and data transformation
+- Loading state management
 
 ## Search Functionality
 
-Algolia provides:
+- Algolia-powered real-time search across vendors, orders, and quotes
+- Typo-tolerant search with fuzzy matching
+- Faceted search and filtering capabilities
+- Instant results with debounced input
+- Search analytics and performance monitoring
 
-- Full-text search across multiple models
-- Typo tolerance and fuzzy matching
-- Faceted filtering and sorting
-- Real-time indexing and search
+## Image & Document Management
 
-## File Upload
+- Cloudinary integration for secure file uploads
+- Image optimization and responsive images
+- Document type validation (PDF, images, documents)
+- Progress indicators for uploads
+- File preview and management
 
-Cloudinary handles:
+## Styling
 
-- Image optimization and transformation
-- Document storage with secure URLs
-- File type validation
-- Automatic format conversion
+- Tailwind CSS for utility-first styling
+- Responsive design patterns for mobile and desktop
+- Custom component library with consistent design system
+- Figma design alignment with professional UI/UX
+- Dark mode support (if implemented)
 
-## Error Handling
+## Deployment
 
-Consistent error responses with appropriate HTTP status codes:
+Deployed on Netlify with configuration in netlify.toml:
 
-- 400 - Bad Request (validation errors)
-- 401 - Unauthorized (authentication required)
-- 403 - Forbidden (insufficient permissions)
-- 404 - Not Found (resource not found)
-- 422 - Unprocessable Entity (business logic errors)
-- 500 - Internal Server Error
+```toml
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
+
+## Environment Variables
+
+- `VITE_API_BASE_URL` - Backend API base URL
+- `VITE_CLOUDINARY_CLOUD_NAME` - Cloudinary cloud name
+- `VITE_CLOUDINARY_UPLOAD_PRESET` - Cloudinary upload preset
+- `VITE_ALGOLIA_APP_ID` - Algolia application ID
+- `VITE_ALGOLIA_SEARCH_KEY` - Algolia search-only API key
 
 ## Testing
 
 ```bash
-# Run all tests
-pytest
+# Run unit tests
+npm test
 
-# Run with coverage
-pytest --cov=app
+# Run integration tests
+npm run test:integration
 
-# Run specific test module
-pytest tests/test_auth.py
+# Run test coverage
+npm run test:coverage
 ```
 
-## Deployment
+## Contributing
 
-The application is configured for deployment on Render/Railway with:
-
-- Production Dependencies: Gunicorn, psycopg2-binary
-- Database: PostgreSQL with connection pooling
-- Environment Configuration: Secure environment variables
-- Process Management: Gunicorn with multiple workers
-
-### Deployment Steps:
-1. Set up PostgreSQL database
-2. Configure environment variables on deployment platform
-3. Run database migrations: `flask db upgrade`
-4. Seed initial data: `python db_seed.py`
-5. Deploy application with Gunicorn
-
-## Environment Variables
-
-- `DATABASE_URL` - PostgreSQL connection string
-- `SECRET_KEY` - Flask secret key for session security
-- `JWT_SECRET_KEY` - JWT token signing key
-- `CLOUDINARY_CLOUD_NAME` - Cloudinary cloud name
-- `CLOUDINARY_API_KEY` - Cloudinary API key
-- `CLOUDINARY_API_SECRET` - Cloudinary API secret
-- `SENDGRID_API_KEY` - SendGrid API key for email
-- `ALGOLIA_APP_ID` - Algolia application ID
-- `ALGOLIA_API_KEY` - Algolia API key
-
-## Security Features
-
-- JWT token-based authentication with expiration
-- Role-based access control with route protection
-- Input validation and sanitization with Marshmallow
-- SQL injection prevention with SQLAlchemy ORM
-- CORS configuration for frontend integration
-- Secure password hashing with bcrypt
-- File upload validation and virus scanning
-- Rate limiting on authentication endpoints
-
-## API Rate Limiting
-
-- Authentication endpoints: 5 requests per minute
-- General API endpoints: 100 requests per minute
-- Search endpoints: 50 requests per minute
-
-## Monitoring and Logging
-
-- Structured JSON logging for production
-- Error tracking and alerting
-- Performance monitoring
-- Database query logging in development
+1. Create a feature branch from develop
+2. Make changes with descriptive commit messages following Conventional Commits
+3. Write tests for new functionality
+4. Submit a pull request for review
+5. Ensure all checks pass before merging
 
 ## Capstone Requirements Compliance
 
-- Flask-RESTful API - Complete RESTful architecture
-- JWT Authentication - Secure token-based authentication
-- Role-Based Access Control - Four distinct user roles with permissions
-- PostgreSQL Database - Production-ready database with proper normalization
-- Marshmallow Serialization - Data validation and serialization
-- CRUD Operations - Complete operations for all entities
-- Pagination - Implemented on all list endpoints
-- Email Integration - SendGrid for notifications
-- Image Handling - Cloudinary integration with optimization
-- Search Functionality - Algolia-powered search
-- API Documentation - Swagger UI documentation
-- Database Migrations - Alembic migration system
-- Production Deployment - Render/Railway deployment ready
+ React with React Router v6 - Implemented with protected routes
+ React Hook Form - Used for all forms with validation
+ Tailwind CSS - Exclusive styling framework
+ Context API - Auth state management
+ JWT Authentication - Secure token-based auth
+ Role-Based Access Control - Four distinct user roles
+ CRUD Operations - Complete for all main entities
+ Pagination - Implemented on all list views
+ Error Handling - User-friendly error messages
+ Date Formatting - Day.js throughout application
+ Cloudinary Integration - Image and document uploads
+ Netlify Deployment - Production deployment
 
 ## License
 
 This project is licensed under the MIT License.
-
-## Support
-
-For technical support or questions about this API, please contact the development team or refer to the Swagger documentation at `/api/docs`.
